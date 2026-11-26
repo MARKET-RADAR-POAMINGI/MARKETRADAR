@@ -385,6 +385,49 @@ footer b{color:var(--dim)}
 .rep-line:last-child{border-bottom:0}
 .rep-line .l{color:var(--dim);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rep-line .r{font-family:var(--mono);white-space:nowrap}
+
+/* ---------- strumenti a leva ---------- */
+.lev-block{margin-top:20px;padding-top:18px;border-top:1px solid var(--line2)}
+.lev-block:first-of-type{border-top:0;padding-top:4px}
+.lev-block-h{display:flex;align-items:center;gap:10px;margin-bottom:2px}
+.lev-n{width:22px;height:22px;border-radius:6px;background:rgba(242,181,68,.14);color:var(--gold);display:grid;place-items:center;font-family:var(--mono);font-size:11.5px;font-weight:700;flex:0 0 auto}
+.lev-block-h h3{margin:0;font-size:14px;letter-spacing:-.1px;color:var(--txt)}
+.lev-lead{color:var(--dim);font-size:12.5px;margin:6px 0 0;max-width:920px;line-height:1.55}
+.lev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:11px;margin-top:13px}
+.lev-card{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:13px 15px;display:flex;flex-direction:column}
+.lev-card-h{display:flex;align-items:flex-start;justify-content:space-between;gap:9px;margin-bottom:7px}
+.lev-card h4{margin:0;font-size:12.5px;font-weight:700;line-height:1.35;color:var(--txt)}
+.lev-tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.03em;color:var(--gold);background:rgba(242,181,68,.1);border:1px solid rgba(242,181,68,.28);border-radius:5px;padding:2px 6px;white-space:nowrap;flex:0 0 auto}
+.lev-card p{margin:0;font-size:12px;line-height:1.55;color:var(--dim)}
+.lev-card p b{color:var(--txt);font-weight:600}
+.lev-where{margin-top:auto;padding-top:10px;font-size:11px;color:var(--dim2);line-height:1.5}
+.lev-where b{display:block;color:var(--dim);font-size:9.5px;text-transform:uppercase;letter-spacing:.09em;margin-bottom:3px;font-weight:700}
+.lev-warn{margin-top:15px;border:1px solid rgba(255,92,108,.28);background:rgba(255,92,108,.06);border-radius:9px;padding:11px 13px;font-size:12px;color:#f0c3c8;line-height:1.55}
+.lev-warn b{color:var(--down)}
+
+/* ---------- connessione broker ---------- */
+.brk-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:13px}
+.brk-pill{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;padding:5px 11px;border-radius:20px;border:1px solid var(--line2);background:var(--panel2);color:var(--dim)}
+.brk-pill.demo{border-color:rgba(74,168,255,.4);background:rgba(74,168,255,.1);color:var(--blue)}
+.brk-pill.real{border-color:rgba(255,92,108,.45);background:rgba(255,92,108,.1);color:var(--down)}
+.brk-pill i{width:6px;height:6px;border-radius:50%;background:currentColor;flex:0 0 auto}
+.brk-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin-top:16px;align-items:start}
+.brk-form{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:15px 16px}
+.brk-form .field input[type=text],.brk-form .field input[type=password],.brk-form .field select{width:100%;background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:8px 11px;color:var(--txt);font-size:12.5px;font-family:inherit}
+.brk-form .field input:focus,.brk-form .field select:focus{outline:none;border-color:#3a4757}
+.brk-form .field input::placeholder{color:var(--dim2)}
+.brk-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.brk-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.brk-side{display:flex;flex-direction:column;gap:11px}
+.brk-note{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:13px 15px;font-size:11.5px;line-height:1.55;color:var(--dim)}
+.brk-note b{color:var(--txt)}
+.brk-note code{font-family:var(--mono);font-size:10.5px;background:var(--panel3);padding:1px 5px;border-radius:4px;color:var(--gold)}
+.brk-msg{font-size:11.5px;margin-top:11px;padding:8px 11px;border-radius:7px;display:none;line-height:1.45}
+.brk-msg.on{display:block}
+.brk-msg.ok{background:rgba(31,209,139,.1);border:1px solid rgba(31,209,139,.3);color:#9fe8c8}
+.brk-msg.err{background:rgba(255,92,108,.1);border:1px solid rgba(255,92,108,.3);color:#f0c3c8}
+.brk-msg.warn{background:rgba(242,181,68,.08);border:1px solid rgba(242,181,68,.3);color:#e8d9b6}
+@media(max-width:900px){.brk-grid{grid-template-columns:1fr}.brk-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -645,6 +688,134 @@ footer b{color:var(--dim)}
       </div>
     </div>
     <p style="margin-top:14px">Soglie: <b style="color:var(--up)">Ingresso</b> da 68 in su, <b style="color:var(--gold)">Osserva</b> tra 50 e 67, <b style="color:var(--dim)">Attendi</b> sotto 50. Un RSI superiore a 78 declassa automaticamente un "Ingresso" a "Osserva", per non segnalare un ingresso su un titolo già in ipercomprato estremo.</p>
+  </div>
+
+  <!-- ============ STRUMENTI A LEVA ============ -->
+  <div class="method" id="leva">
+    <h2>Strumenti a leva</h2>
+    <p>La leva permette di controllare un capitale superiore a quello depositato. Amplifica i guadagni nella stessa misura in cui amplifica le perdite e, in alcuni casi, pu&ograve; azzerare l'intero capitale investito. Qui sotto trovi come si accede a questi strumenti dal mercato italiano, con i limiti regolamentari vigenti per i clienti retail europei.</p>
+
+    <div class="lev-block">
+      <div class="lev-block-h"><span class="lev-n">1</span><h3>Strumenti quotati in Borsa (ETP e Certificati)</h3></div>
+      <p class="lev-lead">Si acquistano tramite una normale banca o broker italiano (es. Borsa Italiana, segmento ETFplus o SeDeX) e incorporano la leva direttamente nella loro struttura.</p>
+      <div class="lev-grid">
+        <div class="lev-card">
+          <div class="lev-card-h"><h4>ETF ed ETP a leva (ETC / ETN)</h4><span class="lev-tag">2x &middot; 3x &middot; &minus;1x &middot; &minus;3x</span></div>
+          <p>Fondi o titoli di debito che replicano la variazione <b>giornaliera</b> di un indice, di una materia prima o di una singola azione moltiplicata per un fattore fisso. Il ricalcolo &egrave; quotidiano: su pi&ugrave; giorni il risultato non &egrave; la leva applicata al rendimento cumulato.</p>
+          <div class="lev-where"><b>Emittenti attivi in Italia</b>WisdomTree &middot; Leverage Shares &middot; GraniteShares</div>
+        </div>
+        <div class="lev-card">
+          <div class="lev-card-h"><h4>Certificati a Leva Fissa</h4><span class="lev-tag">fino a 5x &middot; 7x</span></div>
+          <p>Strumenti emessi da banche d'affari che moltiplicano la performance giornaliera del sottostante, spesso fino a 5x o 7x sugli indici. Come gli ETP, subiscono il ricalcolo quotidiano.</p>
+          <div class="lev-where"><b>Dove si negoziano</b>SeDeX di Borsa Italiana, tramite il proprio intermediario</div>
+        </div>
+        <div class="lev-card">
+          <div class="lev-card-h"><h4>Certificati a Leva Variabile (Turbo e Mini Future)</h4><span class="lev-tag">barriera &middot; knock-out</span></div>
+          <p>Non ricalcano la leva su base giornaliera ma usano una <b>barriera</b> (livello di Knock-Out). La leva cambia in base alla distanza tra il prezzo attuale dell'asset e la barriera: pi&ugrave; il prezzo si avvicina, pi&ugrave; la leva sale. Se il mercato tocca la barriera, il certificato scade anticipatamente <b>azzerando il capitale investito</b>.</p>
+          <div class="lev-where"><b>Da sapere</b>Nessun margine da versare, ma il rischio di perdita totale &egrave; strutturale</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lev-block">
+      <div class="lev-block-h"><span class="lev-n">2</span><h3>Derivati e Trading a Margine</h3></div>
+      <p class="lev-lead">Richiedono il versamento di una frazione del valore totale dell'operazione (detta margine), mentre il resto viene finanziato dall'intermediario.</p>
+      <div class="lev-grid">
+        <div class="lev-card">
+          <div class="lev-card-h"><h4>CFD (Contratti per Differenza)</h4><span class="lev-tag">fino a 30x</span></div>
+          <p>Contratti stipulati con un broker (es. IG Italia) che permettono di speculare al rialzo o al ribasso su azioni, indici, valute (Forex) e materie prime. Per i clienti retail europei la leva massima &egrave; regolamentata dalla normativa ESMA: <b>fino a 30x sulle valute principali, 20x sugli indici principali, 5x sulle azioni</b>.</p>
+          <div class="lev-where"><b>Da sapere</b>Oltre alla leva, il costo &egrave; nello spread e nel finanziamento overnight</div>
+        </div>
+        <div class="lev-card">
+          <div class="lev-card-h"><h4>Operativit&agrave; in Marginazione (Leva bancaria)</h4><span class="lev-tag">margine 10% &middot; 20%</span></div>
+          <p>Servizio offerto da banche e broker (es. Banca Sella) per comprare o vendere allo scoperto azioni impegnando solo una parte della liquidit&agrave;: un margine del 10% o 20% corrisponde a una leva 5x o 10x intraday.</p>
+          <div class="lev-where"><b>Da sapere</b>Il margine va ripristinato se il prezzo si muove contro la posizione</div>
+        </div>
+        <div class="lev-card">
+          <div class="lev-card-h"><h4>Futures e Opzioni</h4><span class="lev-tag">IDEM &middot; CME</span></div>
+          <p>Contratti derivati standardizzati negoziati su mercati regolamentati (come IDEM o CME). Offrono una leva finanziaria elevatissima implicita nel contratto, ma richiedono capitali minimi consistenti e competenze avanzate.</p>
+          <div class="lev-where"><b>Da sapere</b>Margini giornalieri e scadenze contrattuali da gestire attivamente</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lev-warn">
+      <b>Il rischio della leva, in una riga.</b> Con leva 10x un movimento avverso dell'1% del sottostante brucia il 10% del capitale investito; un movimento del 10% lo azzera. Sui certificati a barriera e sui CFD la perdita pu&ograve; arrivare a superare il deposito. Questi strumenti non sono adatti a chi non ha gi&agrave; esperienza con il trading e non sostituiscono una valutazione del proprio profilo di rischio.
+    </div>
+  </div>
+
+  <!-- ============ CONNESSIONE BROKER ============ -->
+  <div class="method" id="broker">
+    <h2>Connessione al broker</h2>
+    <p>Inserisci le credenziali del conto che gi&agrave; possiedi per predisporre l'integrazione con le API del tuo intermediario. La modalit&agrave; <b>demo / paper trading</b> &egrave; attiva per impostazione predefinita; il passaggio all'operativit&agrave; reale richiede chiavi valide e una conferma esplicita.</p>
+
+    <div class="brk-top">
+      <span class="brk-pill demo" id="brkPill"><i></i><span id="brkPillTxt">Demo &middot; paper trading</span></span>
+      <span style="font-size:11.5px;color:var(--dim2)" id="brkSavedLbl">Nessuna configurazione salvata</span>
+    </div>
+
+    <div class="brk-grid">
+      <div class="brk-form">
+        <div class="field">
+          <label for="brkBroker">Broker / intermediario</label>
+          <select id="brkBroker">
+            <option value="">Seleziona il tuo broker&hellip;</option>
+            <option value="ig">IG Italia</option>
+            <option value="sella">Banca Sella</option>
+            <option value="directa">Directa SIM</option>
+            <option value="fineco">Fineco Bank</option>
+            <option value="ibkr">Interactive Brokers</option>
+            <option value="degiro">DEGIRO</option>
+            <option value="altro">Altro intermediario</option>
+          </select>
+        </div>
+        <div class="brk-row">
+          <div class="field">
+            <label for="brkKey">API key / Client ID</label>
+            <input id="brkKey" type="text" autocomplete="off" spellcheck="false" placeholder="incolla la tua chiave">
+          </div>
+          <div class="field">
+            <label for="brkSecret">API secret / Token</label>
+            <input id="brkSecret" type="password" autocomplete="off" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+          </div>
+        </div>
+        <div class="brk-row">
+          <div class="field">
+            <label for="brkAccount">ID conto</label>
+            <input id="brkAccount" type="text" autocomplete="off" spellcheck="false" placeholder="es. U1234567">
+          </div>
+          <div class="field">
+            <label for="brkBase">Endpoint API (opzionale)</label>
+            <input id="brkBase" type="text" autocomplete="off" spellcheck="false" placeholder="https://api.broker.it">
+          </div>
+        </div>
+
+        <div class="switch" style="margin-top:4px">
+          <div><div class="sl">Operativit&agrave; reale</div><div class="sd">Disattivato = demo / paper trading. Attivalo solo con chiavi inserite.</div></div>
+          <button class="tg" id="brkEnvTg" aria-label="Operativit&agrave; reale" aria-pressed="false"></button>
+        </div>
+
+        <div class="brk-actions">
+          <button class="btn primary" id="brkSave">Salva configurazione</button>
+          <button class="btn" id="brkCheck">Verifica formato</button>
+          <button class="btn ghost" id="brkExport">Esporta JSON</button>
+          <button class="btn ghost" id="brkClear">Cancella</button>
+        </div>
+        <div class="brk-msg" id="brkMsg"></div>
+      </div>
+
+      <div class="brk-side">
+        <div class="brk-note">
+          <b>Cosa fa e cosa non fa questa pagina.</b> &Egrave; un sito statico: non apre connessioni verso il broker, non invia ordini e non verifica le tue chiavi presso l'intermediario. La configurazione viene salvata <b>solo nel tuo browser</b> (<code>localStorage</code>) e serve da base per l'integrazione: un backend dovr&agrave; firmare le richieste con le tue chiavi e gestire gli ordini.
+        </div>
+        <div class="brk-note">
+          <b>Interfaccia pronta per l'integrazione.</b> La pagina espone un oggetto <code>BrokerAdapter</code> con i metodi <code>connect()</code>, <code>placeOrder()</code>, <code>positions()</code> e <code>account()</code>: sono segnaposto che restituiscono un errore esplicito finch&eacute; non vengono collegati alle API reali. Nessun ordine viene mai simulato come se fosse eseguito.
+        </div>
+        <div class="brk-note">
+          <b>Sicurezza.</b> Non incollare chiavi con permessi di prelievo. Usa chiavi di sola lettura o di trading, revocabili in qualsiasi momento dal pannello del broker. Su un dispositivo condiviso cancella la configurazione con il pulsante <b>Cancella</b>.
+        </div>
+      </div>
+    </div>
   </div>
 
   <footer>
@@ -2640,6 +2811,166 @@ setInterval(() => { $("clock").textContent = timeIt(new Date()); }, 1000);
 $("clock").textContent = timeIt(new Date());
 
 window.addEventListener("resize", () => { if(S.openSym) drawBig(S.bySym[S.openSym]); drawSimChart(); });
+
+/* ============================================================
+   CONNESSIONE BROKER — configurazione locale + adapter
+   ============================================================ */
+const BRK_STORE = "mr_broker";
+const BRK_BROKERS = {
+  ig:      { name: "IG Italia",           base: "https://api.ig.com/gateway/deal" },
+  sella:   { name: "Banca Sella",         base: "https://api.sella.it" },
+  directa: { name: "Directa SIM",         base: "https://api.directa.it" },
+  fineco:  { name: "Fineco Bank",         base: "https://api.fineco.it" },
+  ibkr:    { name: "Interactive Brokers", base: "https://localhost:5000/v1/api" },
+  degiro:  { name: "DEGIRO",              base: "https://trader.degiro.nl" },
+  altro:   { name: "Altro intermediario", base: "" }
+};
+
+let brk = { broker:"", env:"demo", key:"", secret:"", account:"", base:"", saved:0 };
+
+/* Adapter: segnaposto espliciti. Nessuna chiamata di rete, nessun ordine. */
+const BrokerAdapter = {
+  configured(){ return !!(brk.broker && brk.key && brk.secret && brk.account); },
+  mode(){ return brk.env === "real" ? "real" : "demo"; },
+  async connect(){
+    throw new Error("BrokerAdapter.connect() non implementato: richiede un backend che firmi le richieste con le tue chiavi.");
+  },
+  async account(){
+    throw new Error("BrokerAdapter.account() non implementato: nessuna chiamata viene effettuata da questa pagina.");
+  },
+  async positions(){
+    throw new Error("BrokerAdapter.positions() non implementato: nessuna chiamata viene effettuata da questa pagina.");
+  },
+  async placeOrder(){
+    throw new Error("BrokerAdapter.placeOrder() non implementato: questa pagina non invia ordini, ne in demo ne in reale.");
+  }
+};
+
+function brkMsg(txt, kind){
+  const el = $("brkMsg");
+  if(!el) return;
+  el.className = "brk-msg on " + (kind || "warn");
+  el.textContent = txt;
+}
+
+function loadBroker(){
+  try{
+    const raw = localStorage.getItem(BRK_STORE);
+    if(raw) brk = Object.assign(brk, JSON.parse(raw));
+  }catch(e){}
+  renderBroker();
+}
+
+function saveBroker(){
+  try{ localStorage.setItem(BRK_STORE, JSON.stringify(brk)); }catch(e){}
+}
+
+function renderBroker(){
+  if(!$("brkBroker")) return;
+  $("brkBroker").value  = brk.broker || "";
+  $("brkKey").value     = brk.key || "";
+  $("brkSecret").value  = brk.secret || "";
+  $("brkAccount").value = brk.account || "";
+  $("brkBase").value    = brk.base || "";
+  const real = brk.env === "real";
+  $("brkEnvTg").classList.toggle("on", real);
+  $("brkEnvTg").setAttribute("aria-pressed", real ? "true" : "false");
+  $("brkPill").className = "brk-pill " + (real ? "real" : "demo");
+  $("brkPillTxt").textContent = real
+    ? "Reale \u00b7 ordini non inviati da questa pagina"
+    : "Demo \u00b7 paper trading";
+  $("brkSavedLbl").textContent = brk.saved
+    ? "Configurazione salvata il " + new Date(brk.saved).toLocaleString("it-IT")
+    : "Nessuna configurazione salvata";
+}
+
+function readBrokerForm(){
+  brk.broker  = $("brkBroker").value;
+  brk.key     = $("brkKey").value.trim();
+  brk.secret  = $("brkSecret").value.trim();
+  brk.account = $("brkAccount").value.trim();
+  brk.base    = $("brkBase").value.trim();
+}
+
+function brkValidate(){
+  readBrokerForm();
+  const miss = [];
+  if(!brk.broker)  miss.push("broker");
+  if(!brk.key)     miss.push("API key");
+  if(!brk.secret)  miss.push("API secret");
+  if(!brk.account) miss.push("ID conto");
+  if(brk.base && !/^https?:\/\//i.test(brk.base)) miss.push("endpoint (deve iniziare con http:// o https://)");
+  return miss;
+}
+
+function bindBroker(){
+  if(!$("brkSave")) return;
+
+  $("brkEnvTg").addEventListener("click", () => {
+    readBrokerForm();
+    if(brk.env === "real"){
+      brk.env = "demo";
+      saveBroker(); renderBroker();
+      brkMsg("Tornato in demo / paper trading. Nessun ordine viene inviato.", "ok");
+      return;
+    }
+    const miss = brkValidate();
+    if(miss.length){
+      brkMsg("Per attivare l'operativit\u00e0 reale servono: " + miss.join(", ") + ".", "err");
+      return;
+    }
+    brk.env = "real";
+    saveBroker(); renderBroker();
+    brkMsg("Operativit\u00e0 reale selezionata. Attenzione: questa pagina non invia ordini; l'invio richiede il collegamento dell'adapter a un backend.", "warn");
+  });
+
+  $("brkSave").addEventListener("click", () => {
+    const miss = brkValidate();
+    if(miss.length){ brkMsg("Campi mancanti o non validi: " + miss.join(", ") + ".", "err"); return; }
+    brk.saved = Date.now();
+    saveBroker(); renderBroker();
+    brkMsg("Configurazione salvata nel browser. Nessuna verifica \u00e8 stata fatta presso il broker.", "ok");
+  });
+
+  $("brkCheck").addEventListener("click", () => {
+    const miss = brkValidate();
+    if(miss.length){ brkMsg("Formato non valido: " + miss.join(", ") + ".", "err"); return; }
+    const b = BRK_BROKERS[brk.broker] || { name: brk.broker, base: "" };
+    brkMsg("Formato corretto per " + b.name + ". Endpoint previsto: " + (brk.base || b.base || "da definire") + ". Nota: \u00e8 un controllo locale dei campi, non una connessione reale.", "warn");
+  });
+
+  $("brkExport").addEventListener("click", () => {
+    readBrokerForm();
+    const b = BRK_BROKERS[brk.broker] || { name: brk.broker, base: "" };
+    const cfg = {
+      broker: brk.broker,
+      brokerName: b.name,
+      environment: brk.env,
+      accountId: brk.account,
+      baseUrl: brk.base || b.base,
+      apiKey: brk.key ? "<inserita, " + brk.key.length + " caratteri>" : "",
+      apiSecret: brk.secret ? "<inserito, " + brk.secret.length + " caratteri>" : "",
+      note: "Le credenziali sono oscurate: reinseriscile nel backend. Nessun ordine viene inviato da questa pagina."
+    };
+    const blob = new Blob([JSON.stringify(cfg, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "market-radar-broker-config.json";
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    brkMsg("File di configurazione esportato, con le credenziali oscurate.", "ok");
+  });
+
+  $("brkClear").addEventListener("click", () => {
+    brk = { broker:"", env:"demo", key:"", secret:"", account:"", base:"", saved:0 };
+    try{ localStorage.removeItem(BRK_STORE); }catch(e){}
+    renderBroker();
+    brkMsg("Credenziali cancellate da questo browser.", "ok");
+  });
+}
+
+loadBroker();
+bindBroker();
 
 /* ============================================================
    AVVIO
