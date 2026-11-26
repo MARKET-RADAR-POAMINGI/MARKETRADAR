@@ -1379,9 +1379,44 @@ async function fetchYahooSplit(symbols, range){
 /* CoinGecko gratuito limita le richieste: se risponde errore si riusa l'ultimo
    elenco valido (fino a 15 minuti) invece di perdere tutte le crypto. */
 let cryptoCache = null, cryptoCacheT = 0, cryptoStale = false;
+async function fetchCryptoBinance(){
+  const out = [];
+  let idx = 0;
+  async function worker(){
+    while(idx < CRYPTO.length){
+      const c = CRYPTO[idx++];
+      try{
+        const r = await fetch("https://api.binance.com/api/v3/klines?symbol=" + c[1] + "USDT&interval=1h&limit=168", {cache:"no-store"});
+        if(!r.ok) continue;
+        const k = await r.json();
+        if(!Array.isArray(k) || k.length < 30) continue;
+        const closes = k.map(x => parseFloat(x[4])).filter(v => isFinite(v));
+        const last = closes[closes.length - 1];
+        const p24 = closes[Math.max(0, closes.length - 25)];
+        const p7 = closes[0];
+        const vol24 = k.slice(-24).reduce((s, x) => s + parseFloat(x[7] || 0), 0);
+        out.push({
+          id: c[0], symbol: c[1].toLowerCase(), name: c[2], current_price: last,
+          price_change_percentage_24h: (last / p24 - 1) * 100,
+          price_change_percentage_24h_in_currency: (last / p24 - 1) * 100,
+          price_change_percentage_7d_in_currency: (last / p7 - 1) * 100,
+          sparkline_in_7d: { price: closes },
+          ath: Math.max(...k.map(x => parseFloat(x[2]))), atl: Math.min(...k.map(x => parseFloat(x[3]))),
+          total_volume: vol24, market_cap: null
+        });
+      }catch(e){}
+    }
+  }
+  await Promise.all(Array.from({length: 8}, worker));
+  if(!out.length) throw new Error("binance non raggiungibile");
+  return out;
+}
+let cryptoSrc = "CoinGecko";
 async function fetchCryptoCached(){
   try{
-    const list = await fetchCrypto();
+    let list;
+    try{ list = await fetchCrypto(); cryptoSrc = "CoinGecko"; }
+    catch(e1){ list = await fetchCryptoBinance(); cryptoSrc = "Binance"; }
     if(Array.isArray(list) && list.length){ cryptoCache = list; cryptoCacheT = Date.now(); cryptoStale = false; return list; }
     throw new Error("elenco vuoto");
   }catch(e){
@@ -1546,7 +1581,7 @@ async function refresh(manual){
   S.missY = missList.map(s => (metaMap[s] && metaMap[s][1]) || s);
   S.covY = totSym ? (totSym - missSym) / totSym : 0;
   S.srcY = (okY === totY && missSym === 0) ? "OK" : (okY > 0 ? "Parziale " + (totSym - missSym) + "/" + totSym : "Errore");
-  S.srcC = okC ? (cryptoStale ? "Cache" : "OK") : "Errore";
+  S.srcC = okC ? (cryptoStale ? "Cache" : (cryptoSrc === "Binance" ? "Binance" : "OK")) : "Errore";
 
   if(assets.length){
     // dedupe per simbolo
@@ -1572,7 +1607,11 @@ async function refresh(manual){
 
   const allOk = okC === 1 && S.covY >= 0.9;
   dot.className = "dot " + (allOk ? "" : (assets.length ? "warn" : "err")) + (allOk ? " pulse" : "");
-  st.textContent = allOk ? (missSym ? "Live · " + (totSym - missSym) + "/" + totSym : "Live") : (assets.length ? "Dati parziali" : "Offline");
+  const why = [];
+  if(okC !== 1) why.push("crypto");
+  if(S.covY < 0.9) why.push("Yahoo " + (totSym - missSym) + "/" + totSym);
+  st.textContent = allOk ? (missSym ? "Live · " + (totSym - missSym) + "/" + totSym : "Live")
+                         : (assets.length ? "Dati parziali" + (why.length ? " (" + why.join(", ") + ")" : "") : "Offline");
   $("refreshLbl").textContent = "Aggiorna";
 
   render();
