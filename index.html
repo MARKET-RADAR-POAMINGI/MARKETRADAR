@@ -1134,7 +1134,7 @@ const S = {
   feed: [],
   settings: Object.assign({}, DEFAULTS),
   lastCycle: null,
-  srcY: "—", srcC: "—",
+  srcY: "—", srcC: "—", missY: [], covY: 0,
   timer: null,
   countdown: 0,
   lastHour: null,
@@ -1315,6 +1315,7 @@ function jinaExtract(txt){
 async function fetchYahoo(symbols, range){
   const target = "https://query1.finance.yahoo.com/v7/finance/spark?symbols=" +
     symbols.map(encodeURIComponent).join(",") + "&range=" + range + "&interval=1d";
+  const target2 = target.replace("query1.finance.yahoo.com", "query2.finance.yahoo.com");
   const attempts = [
     () => fetch("https://r.jina.ai/" + target, {cache:"no-store"}).then(r => {
       if(!r.ok) throw new Error("jina " + r.status);
@@ -1327,7 +1328,15 @@ async function fetchYahoo(symbols, range){
     () => fetch("https://corsproxy.io/?url=" + encodeURIComponent(target), {cache:"no-store"}).then(r => {
       if(!r.ok) throw new Error("corsproxy " + r.status);
       return r.json();
-    })
+    }),
+    () => fetch("https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(target), {cache:"no-store"}).then(r => {
+      if(!r.ok) throw new Error("codetabs " + r.status);
+      return r.json();
+    }),
+    () => fetch("https://r.jina.ai/" + target2, {cache:"no-store"}).then(r => {
+      if(!r.ok) throw new Error("jina2 " + r.status);
+      return r.text();
+    }).then(jinaExtract)
   ];
   let lastErr = null;
   for(const fn of attempts){
@@ -1338,6 +1347,57 @@ async function fetchYahoo(symbols, range){
     }catch(e){ lastErr = e; }
   }
   throw lastErr || new Error("fonte non raggiungibile");
+}
+
+/* Se un blocco di simboli fallisce (proxy instabile o un simbolo che manda in errore
+   l'intera richiesta) lo si spezza a metà e si riprova, fino al singolo simbolo:
+   così si perde al massimo il simbolo davvero irraggiungibile, non 18 strumenti. */
+async function fetchYahooSplit(symbols, range){
+  try{
+    const res = await fetchYahoo(symbols, range);
+    const got = new Set(res.map(x => x.symbol));
+    res.missingSyms = symbols.filter(s => !got.has(s));
+    res.missing = res.missingSyms.length;
+    return res;
+  }catch(e){
+    if(symbols.length <= 1){
+      const out = []; out.missing = symbols.length; out.missingSyms = symbols.slice(); return out;
+    }
+    const mid = Math.ceil(symbols.length / 2);
+    const [a, b] = await Promise.all([
+      fetchYahooSplit(symbols.slice(0, mid), range),
+      fetchYahooSplit(symbols.slice(mid), range)
+    ]);
+    const out = a.concat(b);
+    out.missing = (a.missing || 0) + (b.missing || 0);
+    out.missingSyms = (a.missingSyms || []).concat(b.missingSyms || []);
+    if(!out.length) throw e;
+    return out;
+  }
+}
+
+/* CoinGecko gratuito limita le richieste: se risponde errore si riusa l'ultimo
+   elenco valido (fino a 15 minuti) invece di perdere tutte le crypto. */
+let cryptoCache = null, cryptoCacheT = 0, cryptoStale = false;
+async function fetchCryptoCached(){
+  try{
+    const list = await fetchCrypto();
+    if(Array.isArray(list) && list.length){ cryptoCache = list; cryptoCacheT = Date.now(); cryptoStale = false; return list; }
+    throw new Error("elenco vuoto");
+  }catch(e){
+    if(cryptoCache && Date.now() - cryptoCacheT < 15 * 60 * 1000){ cryptoStale = true; return cryptoCache; }
+    throw e;
+  }
+}
+
+/* Prezzi spot rapidi da Binance (CORS aperto, limiti ampi): servono per il tick da 10 secondi. */
+async function fetchBinancePrices(){
+  const r = await fetch("https://api.binance.com/api/v3/ticker/price", {cache:"no-store"});
+  if(!r.ok) throw new Error("binance " + r.status);
+  const arr = await r.json();
+  const m = {};
+  for(const x of arr){ if(x.symbol && x.symbol.endsWith("USDT")) m[x.symbol.slice(0, -4)] = parseFloat(x.price); }
+  return m;
 }
 
 async function fetchCrypto(){
@@ -1439,8 +1499,8 @@ async function refresh(manual){
     ...chunks(MACRO.map(x => x[0]))
   ];
 
-  const tasks = yahooGroups.map(g => () => fetchYahoo(g, "3mo"));
-  tasks.push(() => fetchCrypto());
+  const tasks = yahooGroups.map(g => () => fetchYahooSplit(g, "3mo"));
+  tasks.push(() => fetchCryptoCached());
 
   // limite di concorrenza: i proxy gratuiti non reggono 14 richieste in parallelo
   async function pool(fns, limit){
@@ -1470,17 +1530,23 @@ async function refresh(manual){
 
   let assets = [];
   let okY = 0, totY = yahooGroups.length, okC = 0;
+  const totSym = yahooGroups.reduce((s, g) => s + g.length, 0);
+  let missSym = 0;
+  const missList = [];
 
   settled.forEach((r, i) => {
     if(i < totY){
-      if(r.status === "fulfilled"){ assets = assets.concat(buildFromYahoo(r.value, metaMap)); okY++; }
+      if(r.status === "fulfilled"){ assets = assets.concat(buildFromYahoo(r.value, metaMap)); okY++; missSym += r.value.missing || 0; missList.push(...(r.value.missingSyms || [])); }
+      else { missSym += yahooGroups[i].length; missList.push(...yahooGroups[i]); }
     } else {
       if(r.status === "fulfilled"){ assets = assets.concat(buildFromCrypto(r.value)); okC++; }
     }
   });
 
-  S.srcY = okY === totY ? "OK" : (okY > 0 ? "Parziale " + okY + "/" + totY : "Errore");
-  S.srcC = okC ? "OK" : "Errore";
+  S.missY = missList.map(s => (metaMap[s] && metaMap[s][1]) || s);
+  S.covY = totSym ? (totSym - missSym) / totSym : 0;
+  S.srcY = (okY === totY && missSym === 0) ? "OK" : (okY > 0 ? "Parziale " + (totSym - missSym) + "/" + totSym : "Errore");
+  S.srcC = okC ? (cryptoStale ? "Cache" : "OK") : "Errore";
 
   if(assets.length){
     // dedupe per simbolo
@@ -1504,9 +1570,9 @@ async function refresh(manual){
     if(S.settings.cycleNotif) cycleNotification();
   }
 
-  const allOk = okY === totY && okC === 1;
+  const allOk = okC === 1 && S.covY >= 0.9;
   dot.className = "dot " + (allOk ? "" : (assets.length ? "warn" : "err")) + (allOk ? " pulse" : "");
-  st.textContent = allOk ? "Live" : (assets.length ? "Dati parziali" : "Offline");
+  st.textContent = allOk ? (missSym ? "Live · " + (totSym - missSym) + "/" + totSym : "Live") : (assets.length ? "Dati parziali" : "Offline");
   $("refreshLbl").textContent = "Aggiorna";
 
   render();
@@ -2209,9 +2275,11 @@ function updateSimStatus(){
       cls += " warn";
       msg += "<br>Nessuno strumento \u00e8 in segnale di ingresso adesso, quindi la simulazione non apre posizioni: \u00e8 normale, non un errore. Puoi abbassare la soglia dalle impostazioni.";
     }
-    if(S.srcY !== "OK"){
-      cls += buys ? " warn" : "";
-      msg += "<br>Le quotazioni di azioni/ETF/indici sono incomplete: la simulazione lavora solo sugli strumenti arrivati.";
+    if(S.missY && S.missY.length){
+      const lowCov = S.covY < 0.9;
+      if(lowCov) cls += " warn";
+      msg += "<br>" + (lowCov ? "Quotazioni incomplete" : "Dati live") + ": " + S.missY.length + " strumenti non raggiungibili su Yahoo (" +
+             esc(S.missY.slice(0, 12).join(", ")) + (S.missY.length > 12 ? "\u2026" : "") + "). La simulazione lavora sugli altri.";
     }
   }
   el.className = cls;
@@ -2232,11 +2300,11 @@ async function simLiveTick(){
   liveBusy = true;
   try{
     if(Date.now() >= liveBackoffUntil){
-      const list = await fetchCrypto();
-      list.forEach(c => {
-        const meta = CRYPTO.find(x => x[0] === c.id);
-        const a = meta && S.bySym[meta[1]];
-        if(a && c.current_price > 0){ a.price = c.current_price; a.sig = computeSignal(a); }
+      const px = await fetchBinancePrices();
+      S.assets.forEach(a => {
+        if(a.cls !== "Crypto") return;
+        const v = px[a.sym];
+        if(v > 0){ a.price = v; a.sig = computeSignal(a); }
       });
     }
   }catch(e){
