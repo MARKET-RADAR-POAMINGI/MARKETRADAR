@@ -330,6 +330,8 @@ footer b{color:var(--dim)}
   padding:11px 13px;font-size:12.5px;line-height:1.6;color:var(--dim);margin-bottom:14px;
 }
 .sim-explain b{color:var(--txt)}
+.sim-status{font-family:var(--mono);font-size:11.5px;color:var(--dim);background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin-bottom:14px;line-height:1.55}
+.sim-status b{color:var(--txt)} .sim-status.warn{border-color:rgba(242,181,68,.4);color:#e8d9b6} .sim-status.err{border-color:rgba(255,92,108,.4);color:#ffb3bb}
 .sim-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
 .sim-kpi{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:10px 12px;min-width:0}
 .sim-kpi .k{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim2);font-weight:700}
@@ -513,7 +515,7 @@ footer b{color:var(--dim)}
 
   <div class="notice">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
-    <div><b>Come funziona davvero.</b> Il cruscotto copre <b>tutti i mercati globali</b>: azioni di USA, Europa, Asia-Pacifico, Americhe e Africa; ETF; indici di oltre 40 paesi; materie prime; valute; e 40 criptovalute. I dati arrivano da fonti pubbliche gratuite (Yahoo Finance e CoinGecko) e possono avere ritardi: le quotazioni USA sono tipicamente a 15 minuti, le crypto a 1–2 minuti. Ogni ciclo (un minuto) il cruscotto interroga tutti i mercati e invia <b>una notifica con gli strumenti in segnale di ingresso in quel momento</b>, con nome e punteggio. A mezzanotte produce il <b>resoconto giornaliero</b> di profitti e perdite del portafoglio virtuale. La <b>simulazione di investimento</b> lavora su cicli da 5 minuti con <b>leva 10x</b>: impegna 1.000 unità virtuali di margine sugli strumenti che entrano in segnale, chiude quando escono, e mostra ciclo per ciclo cosa è successo e come cambia il capitale. Tutto funziona <b>mentre la pagina è aperta</b>: un sito statico non può girare a browser chiuso. I segnali sono un filtro quantitativo trasparente, non un ordine di acquisto né una previsione. <b>Due modalità distinte</b>: la <b>simulazione</b> qui sotto usa solo denaro virtuale; il pannello <b>Conto broker</b> può invece inviare ordini veri a un conto Alpaca collegato, demo o reale — e in quel caso gli ordini partono davvero.</div>
+    <div><b>Come funziona davvero.</b> Il cruscotto copre <b>tutti i mercati globali</b>: azioni di USA, Europa, Asia-Pacifico, Americhe e Africa; ETF; indici di oltre 40 paesi; materie prime; valute; e 40 criptovalute. I dati arrivano da fonti pubbliche gratuite (Yahoo Finance e CoinGecko) e possono avere ritardi: le quotazioni USA sono tipicamente a 15 minuti, le crypto a 1–2 minuti. Ogni ciclo (un minuto) il cruscotto interroga tutti i mercati e invia <b>una notifica con gli strumenti in segnale di ingresso in quel momento</b>, con nome e punteggio. A mezzanotte produce il <b>resoconto giornaliero</b> di profitti e perdite del portafoglio virtuale. La <b>simulazione di investimento</b> lavora su cicli da 1 minuto con <b>leva 10x</b>: impegna 1.000 unità virtuali di margine sugli strumenti che entrano in segnale, chiude quando escono, e mostra ciclo per ciclo cosa è successo e come cambia il capitale. Tutto funziona <b>mentre la pagina è aperta</b>: un sito statico non può girare a browser chiuso. I segnali sono un filtro quantitativo trasparente, non un ordine di acquisto né una previsione. <b>Due modalità distinte</b>: la <b>simulazione</b> qui sotto usa solo denaro virtuale; il pannello <b>Conto broker</b> può invece inviare ordini veri a un conto Alpaca collegato, demo o reale — e in quel caso gli ordini partono davvero.</div>
   </div>
 
   <div class="kpis">
@@ -624,17 +626,18 @@ footer b{color:var(--dim)}
 
   <div class="card" id="simCard">
     <div class="card-h">
-      <h2>Simulazione di investimento &middot; leva 10x &middot; cicli da 5 minuti</h2>
+      <h2>Simulazione di investimento &middot; leva 10x &middot; cicli da 1 minuto</h2>
       <span class="num" style="font-size:11px;color:var(--dim2)" id="simCycleLbl">&mdash;</span>
     </div>
     <div class="card-b">
       <div class="sim-explain">
-        <b>Come funziona, in due righe.</b> Ogni <b>5 minuti</b> la simulazione guarda tutti i mercati. Se uno strumento <b>entra in segnale di ingresso</b> impegna <b>1.000 unit&agrave; virtuali di margine con leva 10x</b> (esposizione 10.000 unit&agrave;) a quel prezzo; se <b>esce dal segnale</b> chiude e registra il guadagno o la perdita, amplificati dalla leva. Il capitale parte da <b>10.000 unit&agrave; virtuali</b> e cambia solo per effetto di queste operazioni. <b>Modalit&agrave; sempre simulata</b>: nessun denaro vero, nessun conto bancario, nessun ordine inviato a un broker.
+        <b>Come funziona, in due righe.</b> Ogni <b>minuto</b> la simulazione guarda tutti i mercati. Se uno strumento <b>entra in segnale di ingresso</b> impegna <b>1.000 unit&agrave; virtuali di margine con leva 10x</b> (esposizione 10.000 unit&agrave;) a quel prezzo; se <b>esce dal segnale</b> chiude e registra il guadagno o la perdita, amplificati dalla leva. Il capitale parte da <b>10.000 unit&agrave; virtuali</b> e cambia solo per effetto di queste operazioni. <b>Modalit&agrave; sempre simulata</b>: nessun denaro vero, nessun conto bancario, nessun ordine inviato a un broker.
       </div>
       <div style="display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap">
         <button class="btn" id="simNow" style="font-size:12px">Esegui un ciclo adesso</button>
         <button class="btn ghost" id="simReset" style="font-size:12px">Azzera simulazione</button>
       </div>
+      <div id="simStatus" class="sim-status">&mdash;</div>
       <div class="sim-kpis">
         <div class="sim-kpi"><div class="k">Capitale iniziale</div><div class="v" id="simStart">10.000</div><div class="s">unit&agrave; virtuali &middot; leva 10x</div></div>
         <div class="sim-kpi"><div class="k">Valore attuale</div><div class="v" id="simValue">&mdash;</div><div class="s" id="simDelta">&mdash;</div></div>
@@ -642,13 +645,13 @@ footer b{color:var(--dim)}
         <div class="sim-kpi"><div class="k">Posizioni aperte</div><div class="v" id="simOpen">&mdash;</div><div class="s" id="simOpenS">su 10 disponibili</div></div>
       </div>
       <div class="sim-chart-wrap">
-        <div class="sim-chart-h"><span>Andamento del capitale, ciclo per ciclo</span><span id="simChartLbl">&mdash;</span></div>
+        <div class="sim-chart-h"><span>Andamento del capitale · punto ogni 10 secondi</span><span id="simChartLbl">&mdash;</span></div>
         <canvas id="simChart" width="900" height="150"></canvas>
       </div>
       <div class="sim-cols">
         <div>
           <div class="sim-sub">Ultimo ciclo &middot; cosa &egrave; successo</div>
-          <div id="simLastOps" class="sim-ops"><div class="empty" style="padding:14px 0">In attesa del primo ciclo da 5 minuti&hellip;</div></div>
+          <div id="simLastOps" class="sim-ops"><div class="empty" style="padding:14px 0">In attesa del primo ciclo da 1 minuto&hellip;</div></div>
         </div>
         <div>
           <div class="sim-sub">Posizioni aperte adesso</div>
@@ -1492,6 +1495,8 @@ async function refresh(manual){
     checkAlerts();
     updatePortfolio();
     simCycle(false);
+    simLivePoint();
+    renderSim();   // aggiorna valore e P&L a ogni refresh, non solo ogni ciclo
     maybeDigest();
     maybeDailyReport();
     renderSignals();
@@ -1842,7 +1847,7 @@ function renderReport(){
       '<span class="r" style="color:' + col(o.pnl) + '">' + sign(o.pnl) + ' (' + sign(o.pct) + '%)</span></div>'
     ).join("");
     simHtml =
-      '<div class="rep-sec">Simulazione di investimento \u00b7 cicli da 5 minuti</div>' +
+      '<div class="rep-sec">Simulazione di investimento \u00b7 cicli da 1 minuto</div>' +
       '<div class="rep-grid">' +
         '<div class="rep-cell"><div class="k">Capitale simulato</div><div class="v" style="color:' + col(sim.pnl) + '">' + sim.equity.toFixed(2) + '</div></div>' +
         '<div class="rep-cell"><div class="k">Risultato da inizio</div><div class="v" style="color:' + col(sim.pnl) + '">' + sign(sim.pnl) + ' \u00b7 ' + sign(sim.pct) + '%</div></div>' +
@@ -1905,7 +1910,7 @@ function reportText(rep){
   const sim = rep.sim;
   if(sim){
     L.push("");
-    L.push("== SIMULAZIONE DI INVESTIMENTO (leva 10x, cicli da 5 minuti) ==");
+    L.push("== SIMULAZIONE DI INVESTIMENTO (leva 10x, cicli da 1 minuto) ==");
     L.push("Capitale simulato: " + sim.equity.toFixed(2) + " unita' (" + sign(sim.pnl) + " / " + sign(sim.pct) + "% da inizio)");
     L.push("Cassa disponibile: " + sim.cash.toFixed(2));
     L.push("Realizzato oggi: " + sign(sim.realized) + " | Aperto adesso: " + sign(sim.unreal));
@@ -1992,7 +1997,8 @@ const SIM_START   = 10000;   // capitale iniziale in unità virtuali
 const SIM_PER_POS = 1000;    // margine investito per posizione (unità virtuali)
 const SIM_LEVERAGE= 10;      // leva applicata in simulazione (esposizione = margine × 10)
 const SIM_MAX_OPEN= 10;      // posizioni contemporanee massime
-const SIM_EVERY   = 5 * 60 * 1000;  // un ciclo ogni 5 minuti
+const SIM_EVERY   = 60 * 1000;  // un ciclo ogni minuto
+const SIM_LIVE_MS = 10 * 1000;  // aggiornamento prezzi e grafico ogni 10 secondi
 
 function simInit(){
   if(!S.sim){
@@ -2001,6 +2007,7 @@ function simInit(){
   if(!Array.isArray(S.sim.curve)) S.sim.curve = [];
   if(!Array.isArray(S.sim.closed)) S.sim.closed = [];
   if(!Array.isArray(S.sim.lastOps)) S.sim.lastOps = [];
+  if(!Array.isArray(S.sim.live)) S.sim.live = [];
   if(!S.sim.positions || typeof S.sim.positions !== "object") S.sim.positions = {};
 }
 
@@ -2114,14 +2121,14 @@ function renderSim(){
   el("simOpen").textContent = t.openCount;
   el("simOpenS").textContent = "su " + SIM_MAX_OPEN + " disponibili";
   el("simCycleLbl").textContent = S.sim.cycles
-    ? S.sim.cycles + (S.sim.cycles === 1 ? " ciclo" : " cicli") + " · ogni 5 min"
-    : "ogni 5 min";
+    ? S.sim.cycles + (S.sim.cycles === 1 ? " ciclo" : " cicli") + " · ogni 1 min"
+    : "ogni 1 min";
 
   // ultimo ciclo
   const opsEl = el("simLastOps");
   if(!S.sim.lastOps.length){
     opsEl.innerHTML = '<div class="empty" style="padding:14px 0">' +
-      (S.sim.cycles ? "Nessuna operazione: nessuno strumento ha cambiato stato in questo ciclo." : "In attesa del primo ciclo da 5 minuti…") + '</div>';
+      (S.sim.cycles ? "Nessuna operazione: nessuno strumento ha cambiato stato in questo ciclo." : "In attesa del primo ciclo da 1 minuto…") + '</div>';
   } else {
     opsEl.innerHTML = S.sim.lastOps.map(o =>
       '<div class="sim-op">' +
@@ -2176,6 +2183,70 @@ function renderSim(){
   }
 
   drawSimChart();
+  updateSimStatus();
+}
+
+function updateSimStatus(){
+  const el = $("simStatus");
+  if(!el) return;
+  simInit();
+  const th = S.settings.threshold;
+  const n = S.assets.length;
+  let cls = "sim-status", msg;
+  if(!n){
+    cls += " err";
+    msg = "<b>Nessun dato di mercato ricevuto.</b> Fonti: Yahoo " + esc(S.srcY) + " \u00b7 CoinGecko " + esc(S.srcC) +
+          ". La simulazione parte solo quando arrivano le quotazioni: premi \u201cAggiorna\u201d in alto e controlla la connessione.";
+  } else {
+    const buys = S.assets.filter(a => a.sig.state === "buy" && a.sig.score >= th).length;
+    const left = S.sim.lastCycleT ? Math.max(0, Math.ceil((S.sim.lastCycleT + SIM_EVERY - Date.now()) / 1000)) : 0;
+    const next = S.sim.lastCycleT
+      ? "prossimo ciclo tra <b>" + Math.floor(left / 60) + ":" + String(left % 60).padStart(2, "0") + "</b>"
+      : "primo ciclo in corso\u2026";
+    msg = "<b>" + n + "</b> strumenti caricati (Yahoo " + esc(S.srcY) + " \u00b7 CoinGecko " + esc(S.srcC) + ") \u00b7 <b>" + buys +
+          "</b> in segnale di ingresso (soglia " + th + ") \u00b7 " + next;
+    if(!buys && !Object.keys(S.sim.positions).length){
+      cls += " warn";
+      msg += "<br>Nessuno strumento \u00e8 in segnale di ingresso adesso, quindi la simulazione non apre posizioni: \u00e8 normale, non un errore. Puoi abbassare la soglia dalle impostazioni.";
+    }
+    if(S.srcY !== "OK"){
+      cls += buys ? " warn" : "";
+      msg += "<br>Le quotazioni di azioni/ETF/indici sono incomplete: la simulazione lavora solo sugli strumenti arrivati.";
+    }
+  }
+  el.className = cls;
+  el.innerHTML = msg;
+}
+
+function simLivePoint(){
+  simInit();
+  if(!S.assets.length) return;
+  S.sim.live.push({ t: Date.now(), equity: simTotals().equity });
+  if(S.sim.live.length > 360) S.sim.live = S.sim.live.slice(-360);   // ultima ora
+  saveSim();
+}
+
+let liveBusy = false, liveBackoffUntil = 0;
+async function simLiveTick(){
+  if(liveBusy || !S.assets.length) return;
+  liveBusy = true;
+  try{
+    if(Date.now() >= liveBackoffUntil){
+      const list = await fetchCrypto();
+      list.forEach(c => {
+        const meta = CRYPTO.find(x => x[0] === c.id);
+        const a = meta && S.bySym[meta[1]];
+        if(a && c.current_price > 0){ a.price = c.current_price; a.sig = computeSignal(a); }
+      });
+    }
+  }catch(e){
+    liveBackoffUntil = Date.now() + 60 * 1000;   // fonte satura: si riprova tra un minuto
+  }finally{
+    liveBusy = false;
+  }
+  simCycle(false);
+  simLivePoint();
+  renderSim();
 }
 
 function drawSimChart(){
@@ -2191,7 +2262,7 @@ function drawSimChart(){
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, w, h);
 
-  const pts = S.sim.curve;
+  const pts = (S.sim.live && S.sim.live.length > 1) ? S.sim.live : S.sim.curve;
   const lbl = $("simChartLbl");
   if(!pts.length){
     ctx.fillStyle = "#5b6675";
@@ -3369,8 +3440,9 @@ bindSimButtons();
 bindGate();
 bindBroker();
 
-// la simulazione ha il suo battito: ogni 5 minuti, indipendentemente dalla cadenza del cruscotto
-setInterval(() => { if(S.assets.length) simCycle(false); }, 30 * 1000);
+// la simulazione ha il suo battito: cicli ogni minuto, prezzi crypto e grafico ogni 10 secondi
+setInterval(simLiveTick, SIM_LIVE_MS);
+setInterval(updateSimStatus, 5000);
 
 // il cruscotto parte solo dopo il login; la sessione resta valida finché non si esce
 (function boot(){
