@@ -427,32 +427,56 @@ footer b{color:var(--dim)}
 .brk-msg.ok{background:rgba(31,209,139,.1);border:1px solid rgba(31,209,139,.3);color:#9fe8c8}
 .brk-msg.err{background:rgba(255,92,108,.1);border:1px solid rgba(255,92,108,.3);color:#f0c3c8}
 .brk-msg.warn{background:rgba(242,181,68,.08);border:1px solid rgba(242,181,68,.3);color:#e8d9b6}
-@media(max-width:900px){.brk-grid{grid-template-columns:1fr}.brk-row{grid-template-columns:1fr}}
+.brk-acct{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:13px}
+.brk-acct .a{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 11px;min-width:0}
+.brk-acct .a .k{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim2);font-weight:700}
+.brk-acct .a .v{font-family:var(--mono);font-size:15px;font-weight:600;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brk-list{margin-top:12px;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.brk-list-h{display:flex;justify-content:space-between;align-items:center;padding:8px 11px;background:var(--panel2);border-bottom:1px solid var(--line);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim2);font-weight:700}
+.brk-item{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:8px 11px;border-bottom:1px solid rgba(30,39,51,.6);font-size:12px}
+.brk-item:last-child{border-bottom:0}
+.brk-item .s{font-family:var(--mono);font-weight:600}
+.brk-item .q{font-family:var(--mono);color:var(--dim);font-size:11.5px}
+.brk-item .p{font-family:var(--mono);font-weight:600;text-align:right}
+.brk-item button{border:0;background:transparent;color:var(--dim2);padding:2px 4px;border-radius:5px;line-height:0}
+.brk-item button:hover{color:var(--down);background:rgba(255,92,108,.1)}
+.brk-empty{padding:14px 11px;font-size:11.5px;color:var(--dim2);text-align:center}
+.brk-seg{display:flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:3px;margin-bottom:12px}
+.brk-seg button{flex:1;border:0;background:transparent;color:var(--dim);padding:6px 8px;border-radius:6px;font-size:11.5px;font-weight:700}
+.brk-seg button.on{background:var(--panel3);color:var(--txt);box-shadow:inset 0 0 0 1px var(--line2)}
+.brk-seg button.on.live{color:var(--down);box-shadow:inset 0 0 0 1px rgba(255,92,108,.4)}
+.brk-warn{background:rgba(255,92,108,.07);border:1px solid rgba(255,92,108,.28);border-radius:9px;padding:10px 12px;font-size:11.5px;line-height:1.55;color:#f0c3c8;margin-top:12px}
+.brk-warn b{color:#ffd0d5}
+.brk-warn code{font-family:var(--mono);font-size:10.5px;background:rgba(0,0,0,.3);padding:1px 5px;border-radius:4px;color:#ffd0d5}
+@media(max-width:900px){.brk-grid{grid-template-columns:1fr}.brk-row{grid-template-columns:1fr}.brk-acct{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<div class="gate" id="gate">
+<!-- ============ LOGIN GATE ============ -->
+<div class="gate on" id="gate">
   <div class="gate-card">
     <div class="gate-logo">
       <svg viewBox="0 0 24 24" fill="none" stroke="#1a1206" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 4-7 5 5"/><circle cx="21" cy="13" r="1.6" fill="#1a1206" stroke="none"/></svg>
     </div>
-    <h2 id="gateTitle">Market Radar</h2>
-    <p class="sub" id="gateSub">Accesso riservato al cruscotto.</p>
-    <form id="gateForm" autocomplete="off" novalidate>
-      <label for="gateUser">Utente</label>
-      <input id="gateUser" type="text" autocomplete="username" spellcheck="false" placeholder="il tuo nome utente">
-      <label for="gatePass">Password</label>
-      <input id="gatePass" type="password" autocomplete="current-password" placeholder="almeno 6 caratteri">
-      <div id="gatePass2Wrap" class="gate-hide">
-        <label for="gatePass2">Ripeti la password</label>
-        <input id="gatePass2" type="password" autocomplete="new-password" placeholder="ripeti la password">
-      </div>
-      <div class="gate-err" id="gateErr"></div>
-      <button class="btn primary" type="submit" id="gateBtn">Entra</button>
-    </form>
-    <div class="gate-note" id="gateNote">
-      <b>Nota sulla sicurezza.</b> Questa è una pagina statica: il login gira interamente nel browser e serve a proteggere il cruscotto da occhi indiscreti sullo stesso dispositivo. Non è un'autenticazione lato server e non protegge i dati da chi ha accesso tecnico al browser.
+    <h2 id="gateTitle">Accedi a Market Radar</h2>
+    <div class="sub" id="gateSub">Il cruscotto è protetto. Crea il tuo account su questo browser oppure rientra con le credenziali che hai già usato.</div>
+
+    <div id="gateNameWrap" class="gate-hide">
+      <label for="gName">Nome</label>
+      <input id="gName" type="text" autocomplete="name" placeholder="Come ti chiami">
+    </div>
+    <label for="gEmail">Email</label>
+    <input id="gEmail" type="email" autocomplete="username" placeholder="nome@esempio.it">
+    <label for="gPass">Password</label>
+    <input id="gPass" type="password" autocomplete="current-password" placeholder="Almeno 6 caratteri">
+
+    <div class="gate-err" id="gateErr"></div>
+    <button class="btn primary" id="gateSubmit">Accedi</button>
+    <button class="btn ghost" id="gateSwitch" style="margin-top:8px">Non hai un account? Registrati</button>
+
+    <div class="gate-note">
+      <b>Dove finiscono i dati.</b> L'account è locale a questo browser: la password viene salvata solo come impronta <code>SHA-256</code> con sale casuale, non viene mai inviata a un server e non esiste un "recupera password". Se cancelli i dati del sito, l'account sparisce.
     </div>
   </div>
 </div>
@@ -475,11 +499,12 @@ footer b{color:var(--dim)}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
       <span id="refreshLbl">Aggiorna</span>
     </button>
-    <button class="btn ghost" id="btnLock" title="Blocca sessione">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
-    </button>
     <button class="btn ghost" id="btnSettings" title="Impostazioni">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2V21a2 2 0 1 1-4 0v-.1A1.7 1.7 0 0 0 7 19.4a1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 3 15a1.7 1.7 0 0 0-1.6-1H1a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 3 9a1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 9 3a1.7 1.7 0 0 0 1-1.6V1a2 2 0 1 1 4 0v.1A1.7 1.7 0 0 0 15 3a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.7 1.7 0 0 0 21 9v.1a1.7 1.7 0 0 0 1.6 1H23a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+    <button class="btn ghost" id="btnUser" title="Account">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+      <span id="userLbl" style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Account</span>
     </button>
   </div>
 </div>
@@ -488,7 +513,7 @@ footer b{color:var(--dim)}
 
   <div class="notice">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
-    <div><b>Come funziona davvero.</b> Il cruscotto copre <b>tutti i mercati globali</b>: azioni di USA, Europa, Asia-Pacifico, Americhe e Africa; ETF; indici di oltre 40 paesi; materie prime; valute; e 40 criptovalute. I dati arrivano da fonti pubbliche gratuite (Yahoo Finance e CoinGecko) e possono avere ritardi: le quotazioni USA sono tipicamente a 15 minuti, le crypto a 1–2 minuti. Ogni ciclo (un minuto) il cruscotto interroga tutti i mercati e invia <b>una notifica con gli strumenti in segnale di ingresso in quel momento</b>, con nome e punteggio. A mezzanotte produce il <b>resoconto giornaliero</b> di profitti e perdite del portafoglio virtuale. La <b>simulazione di investimento</b> lavora su cicli da 5 minuti: compra 1.000 unità virtuali sugli strumenti che entrano in segnale, vende quando escono, e mostra ciclo per ciclo cosa è successo e come cambia il capitale. Tutto funziona <b>mentre la pagina è aperta</b>: un sito statico non può girare a browser chiuso. I segnali sono un filtro quantitativo trasparente, non un ordine di acquisto né una previsione.</div>
+    <div><b>Come funziona davvero.</b> Il cruscotto copre <b>tutti i mercati globali</b>: azioni di USA, Europa, Asia-Pacifico, Americhe e Africa; ETF; indici di oltre 40 paesi; materie prime; valute; e 40 criptovalute. I dati arrivano da fonti pubbliche gratuite (Yahoo Finance e CoinGecko) e possono avere ritardi: le quotazioni USA sono tipicamente a 15 minuti, le crypto a 1–2 minuti. Ogni ciclo (un minuto) il cruscotto interroga tutti i mercati e invia <b>una notifica con gli strumenti in segnale di ingresso in quel momento</b>, con nome e punteggio. A mezzanotte produce il <b>resoconto giornaliero</b> di profitti e perdite del portafoglio virtuale. La <b>simulazione di investimento</b> lavora su cicli da 5 minuti con <b>leva 10x</b>: impegna 1.000 unità virtuali di margine sugli strumenti che entrano in segnale, chiude quando escono, e mostra ciclo per ciclo cosa è successo e come cambia il capitale. Tutto funziona <b>mentre la pagina è aperta</b>: un sito statico non può girare a browser chiuso. I segnali sono un filtro quantitativo trasparente, non un ordine di acquisto né una previsione. <b>Due modalità distinte</b>: la <b>simulazione</b> qui sotto usa solo denaro virtuale; il pannello <b>Conto broker</b> può invece inviare ordini veri a un conto Alpaca collegato, demo o reale — e in quel caso gli ordini partono davvero.</div>
   </div>
 
   <div class="kpis">
@@ -522,21 +547,96 @@ footer b{color:var(--dim)}
     <div class="bar"><i class="u" id="barUp" style="width:50%"></i><i class="d" id="barDown" style="width:50%"></i></div>
   </div>
 
+  <div class="card" id="brokerCard">
+    <div class="card-h">
+      <h2>Conto broker &middot; operativit&agrave; reale</h2>
+      <span class="brk-pill" id="brkPill"><i></i><span id="brkPillTxt">non collegato</span></span>
+    </div>
+    <div class="card-b">
+      <div class="brk-grid">
+        <div>
+          <div class="brk-seg" id="brkSeg">
+            <button data-mode="paper" class="on">Demo (paper)</button>
+            <button data-mode="live">Reale (live)</button>
+          </div>
+
+          <div class="brk-form">
+            <div class="field">
+              <label for="brkKey">API Key ID</label>
+              <input id="brkKey" type="text" autocomplete="off" spellcheck="false" placeholder="PK... (paper) oppure AK... (live)">
+            </div>
+            <div class="field">
+              <label for="brkSecret">API Secret</label>
+              <input id="brkSecret" type="password" autocomplete="off" spellcheck="false" placeholder="la chiave segreta, mostrata una sola volta">
+            </div>
+            <div class="brk-row">
+              <div class="field">
+                <label for="brkProxy">Server proxy (opzionale)</label>
+                <input id="brkProxy" type="text" autocomplete="off" spellcheck="false" placeholder="https://tuo-server.example">
+              </div>
+              <div class="field">
+                <label for="brkToken">Token del proxy</label>
+                <input id="brkToken" type="password" autocomplete="off" spellcheck="false" placeholder="Bearer token">
+              </div>
+            </div>
+            <div class="brk-actions">
+              <button class="btn primary" id="brkConnect">Collega il conto</button>
+              <button class="btn" id="brkRefresh">Aggiorna saldo</button>
+              <button class="btn ghost" id="brkDisconnect">Scollega</button>
+            </div>
+            <div class="brk-msg" id="brkMsg"></div>
+          </div>
+
+          <div class="brk-acct" id="brkAcct" style="display:none">
+            <div class="a"><div class="k">Patrimonio</div><div class="v" id="brkEquity">&mdash;</div></div>
+            <div class="a"><div class="k">Liquidit&agrave;</div><div class="v" id="brkCash">&mdash;</div></div>
+            <div class="a"><div class="k">Potere d'acquisto</div><div class="v" id="brkBP">&mdash;</div></div>
+          </div>
+
+          <div class="brk-list" id="brkPosWrap" style="display:none">
+            <div class="brk-list-h"><span>Posizioni reali</span><span id="brkPosCount">0</span></div>
+            <div id="brkPos"></div>
+          </div>
+
+          <div class="brk-list" id="brkOrdWrap" style="display:none">
+            <div class="brk-list-h"><span>Ordini recenti</span><span id="brkOrdCount">0</span></div>
+            <div id="brkOrd"></div>
+          </div>
+        </div>
+
+        <div class="brk-side">
+          <div class="brk-note">
+            <b>Dove vanno le credenziali.</b> Le due chiavi qui sopra sono l'unico punto in cui si inseriscono: vengono salvate nel <code>localStorage</code> di questo browser e usate per firmare le chiamate al broker. Non sono mai scritte nel file <code>index.html</code>.
+          </div>
+          <div class="brk-note">
+            <b>Come ottenerle (Alpaca).</b> Crea un conto su <code>alpaca.markets</code>, apri la sezione <b>API Keys</b> e genera una coppia. Le chiavi che iniziano con <code>PK</code> sono del conto demo, quelle con <code>AK</code> del conto reale. Il conto demo &egrave; gratuito e usa denaro finto: &egrave; il modo giusto per provare tutto prima di rischiare capitale.
+          </div>
+          <div class="brk-note">
+            <b>Perch&eacute; il proxy.</b> Una chiave che pu&ograve; inviare ordini, se sta nel browser, &egrave; leggibile da chiunque usi quel computer. Per operare con denaro vero conviene un piccolo server che custodisce le chiavi: metti il suo indirizzo nel campo <b>Server proxy</b> e le chiavi restano l&igrave;. La guida allegata contiene un esempio pronto.
+          </div>
+          <div class="brk-warn">
+            <b>Prima di passare al reale.</b> Gli ordini partono davvero e sono irrevocabili una volta eseguiti. Verifica di essere in modalit&agrave; <b>Reale</b> solo quando &egrave; ci&ograve; che vuoi, controlla simbolo, lato e quantit&agrave; nella finestra di conferma, e ricorda che indici, valute e materie prime non sono negoziabili su questo broker: servono gli ETF equivalenti.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="card" id="simCard">
     <div class="card-h">
-      <h2>Simulazione di investimento &middot; cicli da 5 minuti</h2>
+      <h2>Simulazione di investimento &middot; leva 10x &middot; cicli da 5 minuti</h2>
       <span class="num" style="font-size:11px;color:var(--dim2)" id="simCycleLbl">&mdash;</span>
     </div>
     <div class="card-b">
       <div class="sim-explain">
-        <b>Come funziona, in due righe.</b> Ogni <b>5 minuti</b> la simulazione guarda tutti i mercati. Se uno strumento <b>entra in segnale di ingresso</b> compra 1.000 unit&agrave; virtuali a quel prezzo; se <b>esce dal segnale</b> vende e registra il guadagno o la perdita. Il capitale parte da <b>10.000 unit&agrave; virtuali</b> e cambia solo per effetto di questi acquisti e vendite. Nessun denaro vero, nessun ordine inviato a un broker.
+        <b>Come funziona, in due righe.</b> Ogni <b>5 minuti</b> la simulazione guarda tutti i mercati. Se uno strumento <b>entra in segnale di ingresso</b> impegna <b>1.000 unit&agrave; virtuali di margine con leva 10x</b> (esposizione 10.000 unit&agrave;) a quel prezzo; se <b>esce dal segnale</b> chiude e registra il guadagno o la perdita, amplificati dalla leva. Il capitale parte da <b>10.000 unit&agrave; virtuali</b> e cambia solo per effetto di queste operazioni. <b>Modalit&agrave; sempre simulata</b>: nessun denaro vero, nessun conto bancario, nessun ordine inviato a un broker.
       </div>
       <div style="display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap">
         <button class="btn" id="simNow" style="font-size:12px">Esegui un ciclo adesso</button>
         <button class="btn ghost" id="simReset" style="font-size:12px">Azzera simulazione</button>
       </div>
       <div class="sim-kpis">
-        <div class="sim-kpi"><div class="k">Capitale iniziale</div><div class="v" id="simStart">10.000</div><div class="s">unit&agrave; virtuali</div></div>
+        <div class="sim-kpi"><div class="k">Capitale iniziale</div><div class="v" id="simStart">10.000</div><div class="s">unit&agrave; virtuali &middot; leva 10x</div></div>
         <div class="sim-kpi"><div class="k">Valore attuale</div><div class="v" id="simValue">&mdash;</div><div class="s" id="simDelta">&mdash;</div></div>
         <div class="sim-kpi"><div class="k">Realizzato / aperto</div><div class="v" id="simSplit" style="font-size:13px">&mdash;</div><div class="s">chiuso / non chiuso</div></div>
         <div class="sim-kpi"><div class="k">Posizioni aperte</div><div class="v" id="simOpen">&mdash;</div><div class="s" id="simOpenS">su 10 disponibili</div></div>
@@ -744,80 +844,6 @@ footer b{color:var(--dim)}
     </div>
   </div>
 
-  <!-- ============ CONNESSIONE BROKER ============ -->
-  <div class="method" id="broker">
-    <h2>Connessione al broker</h2>
-    <p>Inserisci le credenziali del conto che gi&agrave; possiedi per predisporre l'integrazione con le API del tuo intermediario. La modalit&agrave; <b>demo / paper trading</b> &egrave; attiva per impostazione predefinita; il passaggio all'operativit&agrave; reale richiede chiavi valide e una conferma esplicita.</p>
-
-    <div class="brk-top">
-      <span class="brk-pill demo" id="brkPill"><i></i><span id="brkPillTxt">Demo &middot; paper trading</span></span>
-      <span style="font-size:11.5px;color:var(--dim2)" id="brkSavedLbl">Nessuna configurazione salvata</span>
-    </div>
-
-    <div class="brk-grid">
-      <div class="brk-form">
-        <div class="field">
-          <label for="brkBroker">Broker / intermediario</label>
-          <select id="brkBroker">
-            <option value="">Seleziona il tuo broker&hellip;</option>
-            <option value="ig">IG Italia</option>
-            <option value="sella">Banca Sella</option>
-            <option value="directa">Directa SIM</option>
-            <option value="fineco">Fineco Bank</option>
-            <option value="ibkr">Interactive Brokers</option>
-            <option value="degiro">DEGIRO</option>
-            <option value="altro">Altro intermediario</option>
-          </select>
-        </div>
-        <div class="brk-row">
-          <div class="field">
-            <label for="brkKey">API key / Client ID</label>
-            <input id="brkKey" type="text" autocomplete="off" spellcheck="false" placeholder="incolla la tua chiave">
-          </div>
-          <div class="field">
-            <label for="brkSecret">API secret / Token</label>
-            <input id="brkSecret" type="password" autocomplete="off" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
-          </div>
-        </div>
-        <div class="brk-row">
-          <div class="field">
-            <label for="brkAccount">ID conto</label>
-            <input id="brkAccount" type="text" autocomplete="off" spellcheck="false" placeholder="es. U1234567">
-          </div>
-          <div class="field">
-            <label for="brkBase">Endpoint API (opzionale)</label>
-            <input id="brkBase" type="text" autocomplete="off" spellcheck="false" placeholder="https://api.broker.it">
-          </div>
-        </div>
-
-        <div class="switch" style="margin-top:4px">
-          <div><div class="sl">Operativit&agrave; reale</div><div class="sd">Disattivato = demo / paper trading. Attivalo solo con chiavi inserite.</div></div>
-          <button class="tg" id="brkEnvTg" aria-label="Operativit&agrave; reale" aria-pressed="false"></button>
-        </div>
-
-        <div class="brk-actions">
-          <button class="btn primary" id="brkSave">Salva configurazione</button>
-          <button class="btn" id="brkCheck">Verifica formato</button>
-          <button class="btn ghost" id="brkExport">Esporta JSON</button>
-          <button class="btn ghost" id="brkClear">Cancella</button>
-        </div>
-        <div class="brk-msg" id="brkMsg"></div>
-      </div>
-
-      <div class="brk-side">
-        <div class="brk-note">
-          <b>Cosa fa e cosa non fa questa pagina.</b> &Egrave; un sito statico: non apre connessioni verso il broker, non invia ordini e non verifica le tue chiavi presso l'intermediario. La configurazione viene salvata <b>solo nel tuo browser</b> (<code>localStorage</code>) e serve da base per l'integrazione: un backend dovr&agrave; firmare le richieste con le tue chiavi e gestire gli ordini.
-        </div>
-        <div class="brk-note">
-          <b>Interfaccia pronta per l'integrazione.</b> La pagina espone un oggetto <code>BrokerAdapter</code> con i metodi <code>connect()</code>, <code>placeOrder()</code>, <code>positions()</code> e <code>account()</code>: sono segnaposto che restituiscono un errore esplicito finch&eacute; non vengono collegati alle API reali. Nessun ordine viene mai simulato come se fosse eseguito.
-        </div>
-        <div class="brk-note">
-          <b>Sicurezza.</b> Non incollare chiavi con permessi di prelievo. Usa chiavi di sola lettura o di trading, revocabili in qualsiasi momento dal pannello del broker. Su un dispositivo condiviso cancella la configurazione con il pulsante <b>Cancella</b>.
-        </div>
-      </div>
-    </div>
-  </div>
-
   <footer>
     <b>Market Radar</b> — cruscotto indipendente, nessuna affiliazione con Yahoo, CoinGecko o gli emittenti citati. I dati sono forniti "così come sono" dalle fonti pubbliche e possono essere incompleti, ritardati o errati. Le notifiche del browser richiedono il permesso esplicito e funzionano solo con la pagina aperta.
     <div class="disc">
@@ -898,6 +924,51 @@ footer b{color:var(--dim)}
 </div>
 
 <div class="toasts" id="toasts"></div>
+
+<!-- ============ MODALE ORDINE ============ -->
+<div class="modal" id="ordModal">
+  <div class="modal-c">
+    <div class="modal-h">
+      <h3>Conferma ordine</h3>
+      <button class="x" id="ordClose" aria-label="Chiudi">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-b">
+      <div id="ordSummary" style="background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:12px 14px;font-size:12.5px;line-height:1.7;margin-bottom:14px"></div>
+      <div class="field">
+        <label for="ordSide">Lato</label>
+        <select id="ordSide"><option value="buy">Compra</option><option value="sell">Vendi</option></select>
+      </div>
+      <div class="field">
+        <label for="ordType">Tipo</label>
+        <select id="ordType"><option value="market">A mercato</option><option value="limit">Limite</option></select>
+      </div>
+      <div class="brk-row">
+        <div class="field">
+          <label for="ordQty">Quantit&agrave;</label>
+          <input id="ordQty" type="number" step="any" min="0" placeholder="es. 1">
+        </div>
+        <div class="field">
+          <label for="ordNotional">Importo (valuta conto)</label>
+          <input id="ordNotional" type="number" step="any" min="0" placeholder="es. 100">
+        </div>
+      </div>
+      <div class="field" id="ordLimitWrap" style="display:none">
+        <label for="ordLimit">Prezzo limite</label>
+        <input id="ordLimit" type="number" step="any" min="0" placeholder="prezzo">
+      </div>
+      <div class="field .hint" style="font-size:11px;color:var(--dim2);line-height:1.5">
+        Indica la <b>quantit&agrave;</b> oppure l'<b>importo</b>: per azioni ed ETF va bene l'importo, per le criptovalute serve la quantit&agrave;.
+      </div>
+      <div class="brk-msg" id="ordMsg"></div>
+      <div style="margin-top:16px;display:flex;gap:9px">
+        <button class="btn primary" id="ordSend" style="flex:1;justify-content:center">Invia ordine</button>
+        <button class="btn" id="ordCancel">Annulla</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 "use strict";
@@ -1834,7 +1905,7 @@ function reportText(rep){
   const sim = rep.sim;
   if(sim){
     L.push("");
-    L.push("== SIMULAZIONE DI INVESTIMENTO (cicli da 5 minuti) ==");
+    L.push("== SIMULAZIONE DI INVESTIMENTO (leva 10x, cicli da 5 minuti) ==");
     L.push("Capitale simulato: " + sim.equity.toFixed(2) + " unita' (" + sign(sim.pnl) + " / " + sign(sim.pct) + "% da inizio)");
     L.push("Cassa disponibile: " + sim.cash.toFixed(2));
     L.push("Realizzato oggi: " + sign(sim.realized) + " | Aperto adesso: " + sign(sim.unreal));
@@ -1856,7 +1927,7 @@ function reportText(rep){
     if(sim.open.length){
       L.push("");
       L.push("Posizioni aperte adesso (" + sim.openCount + "):");
-      sim.open.forEach(o => L.push("  " + o.sym + " (" + o.cls + "): entrata " + o.entry.toFixed(2) + " -> " + o.price.toFixed(2) + " = " + sign(o.pnl) + " (" + sign(o.pct) + "%)"));
+      sim.open.forEach(o => L.push("  " + o.sym + " (" + o.cls + "): entrata " + o.entry.toFixed(2) + " -> " + o.price.toFixed(2) + " = " + sign(o.pnl) + " (" + sign(o.pct) + "%) [leva 10x]"));
     }
   }
   L.push("");
@@ -1918,7 +1989,8 @@ function bindRepNow(){
    SIMULAZIONE DI INVESTIMENTO — CICLI DA 5 MINUTI
    ============================================================ */
 const SIM_START   = 10000;   // capitale iniziale in unità virtuali
-const SIM_PER_POS = 1000;    // unità investite per posizione
+const SIM_PER_POS = 1000;    // margine investito per posizione (unità virtuali)
+const SIM_LEVERAGE= 10;      // leva applicata in simulazione (esposizione = margine × 10)
 const SIM_MAX_OPEN= 10;      // posizioni contemporanee massime
 const SIM_EVERY   = 5 * 60 * 1000;  // un ciclo ogni 5 minuti
 
@@ -1939,8 +2011,9 @@ function simTotals(){
     const p = S.sim.positions[sym];
     const a = S.bySym[sym];
     const px = a && a.price != null ? a.price : p.entry;
-    openVal  += px * p.qty;
-    openCost += p.entry * p.qty;
+    const margin = p.margin != null ? p.margin : p.entry * p.qty;   // posizioni pre-leva: capitale interamente investito
+    openVal  += margin + (px - p.entry) * p.qty;   // margine + risultato non realizzato
+    openCost += margin;
     unreal   += (px - p.entry) * p.qty;
   }
   const realized = S.sim.closed.reduce((s,t) => s + t.pnl, 0);
@@ -1969,9 +2042,9 @@ function simCycle(force){
     if(!a || a.price == null) continue;
     const stillBuy = a.sig.state === "buy" && a.sig.score >= th;
     if(stillBuy) continue;
-    const proceeds = a.price * p.qty;
-    const pnl = proceeds - p.entry * p.qty;
-    S.sim.cash += proceeds;
+    const pnl = (a.price - p.entry) * p.qty;
+    const margin = p.margin != null ? p.margin : p.entry * p.qty;
+    S.sim.cash += margin + pnl;   // restituisce il margine più il risultato
     S.sim.closed.push({
       sym, name: p.name, cls: p.cls, entry: p.entry, exit: a.price,
       qty: p.qty, pnl, pct: (a.price / p.entry - 1) * 100,
@@ -1989,13 +2062,13 @@ function simCycle(force){
 
   for(const a of buys){
     if(Object.keys(S.sim.positions).length >= SIM_MAX_OPEN) break;
-    const budget = Math.min(SIM_PER_POS, S.sim.cash);
-    if(budget < 50) break;                       // cassa insufficiente
-    const qty = budget / a.price;
-    S.sim.cash -= budget;
+    const margin = Math.min(SIM_PER_POS, S.sim.cash);
+    if(margin < 50) break;                       // cassa insufficiente
+    const qty = (margin * SIM_LEVERAGE) / a.price;   // esposizione = margine × leva 10x
+    S.sim.cash -= margin;
     S.sim.positions[a.sym] = {
       sym: a.sym, name: a.longName, cls: a.cls,
-      entry: a.price, qty, openT: now, score: a.sig.score
+      entry: a.price, qty, margin, leverage: SIM_LEVERAGE, openT: now, score: a.sig.score
     };
     ops.push({ side: "buy", sym: a.sym, name: a.longName, price: a.price, pnl: null, pct: null });
   }
@@ -2074,7 +2147,7 @@ function renderSim(){
       const pnl = (px - p.entry) * p.qty;
       const pct = (px / p.entry - 1) * 100;
       return '<div class="sim-op">' +
-        '<span class="tag b">APERTA</span>' +
+        '<span class="tag b">APERTA 10x</span>' +
         '<span class="nm"><b>' + esc(sym) + '</b> ' + esc(p.name) + '</span>' +
         '<span class="px">' + fmtPrice(p.entry) + ' → ' + fmtPrice(px) + '</span>' +
         '<span class="pl" style="color:' + col(pnl) + '">' + sign(pnl) + '</span>' +
@@ -2214,111 +2287,6 @@ function loadSim(){
     }
   }catch(e){}
   simInit();
-}
-
-/* ============================================================
-   LOGIN
-   ============================================================ */
-async function sha256(str){
-  try{
-    if(window.crypto && crypto.subtle){
-      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,"0")).join("");
-    }
-  }catch(e){}
-  // fallback deterministico (solo se crypto.subtle non è disponibile)
-  let h1 = 0x811c9dc5, h2 = 0x01000193;
-  for(let i=0;i<str.length;i++){
-    h1 = (h1 ^ str.charCodeAt(i)) * 16777619 >>> 0;
-    h2 = (h2 + str.charCodeAt(i) * (i+7)) >>> 0;
-  }
-  return "fb" + h1.toString(16) + h2.toString(16);
-}
-
-function getAccount(){
-  try{ return JSON.parse(localStorage.getItem("mr_account") || "null"); }catch(e){ return null; }
-}
-function setSession(u){
-  try{ localStorage.setItem("mr_session", JSON.stringify({ u, t: Date.now() })); }catch(e){}
-}
-function getSession(){
-  try{ return JSON.parse(localStorage.getItem("mr_session") || "null"); }catch(e){ return null; }
-}
-function clearSession(){
-  try{ localStorage.removeItem("mr_session"); }catch(e){}
-}
-
-let gateMode = "login";
-
-function showGate(mode){
-  gateMode = mode;
-  const acc = getAccount();
-  $("gate").classList.add("on");
-  $("gateTitle").textContent = mode === "register" ? "Crea il tuo accesso" : "Market Radar";
-  $("gateSub").textContent = mode === "register"
-    ? "Primo avvio: scegli utente e password. Restano salvati solo in questo browser."
-    : "Accesso riservato al cruscotto.";
-  $("gatePass2Wrap").classList.toggle("gate-hide", mode !== "register");
-  $("gateBtn").textContent = mode === "register" ? "Crea accesso" : "Entra";
-  $("gateErr").textContent = "";
-  $("gatePass").value = "";
-  $("gatePass2").value = "";
-  if(mode === "login" && acc) $("gateUser").value = acc.u;
-  setTimeout(() => { (mode === "login" && acc ? $("gatePass") : $("gateUser")).focus(); }, 60);
-}
-
-async function submitGate(e){
-  e.preventDefault();
-  const u = $("gateUser").value.trim();
-  const p = $("gatePass").value;
-  const err = $("gateErr");
-  err.textContent = "";
-
-  if(u.length < 3){ err.textContent = "Inserisci un nome utente di almeno 3 caratteri."; return; }
-  if(p.length < 6){ err.textContent = "La password deve avere almeno 6 caratteri."; return; }
-
-  if(gateMode === "register"){
-    const p2 = $("gatePass2").value;
-    if(p !== p2){ err.textContent = "Le due password non coincidono."; return; }
-    const h = await sha256(u.toLowerCase() + "::" + p);
-    try{ localStorage.setItem("mr_account", JSON.stringify({ u, h, created: Date.now() })); }catch(e2){}
-    setSession(u);
-    S.user = u;
-    enterApp();
-    return;
-  }
-
-  const acc = getAccount();
-  if(!acc){ showGate("register"); return; }
-  const h = await sha256(u.toLowerCase() + "::" + p);
-  if(u.toLowerCase() !== String(acc.u).toLowerCase() || h !== acc.h){
-    err.textContent = "Utente o password non corretti.";
-    $("gatePass").value = "";
-    $("gatePass").focus();
-    return;
-  }
-  setSession(acc.u);
-  S.user = acc.u;
-  enterApp();
-}
-
-function enterApp(){
-  $("gate").classList.remove("on");
-  $("gatePass").value = "";
-  $("gatePass2").value = "";
-  $("gateErr").textContent = "";
-  startApp();
-  if(S.settings.cycleNotif && "Notification" in window && Notification.permission === "default"){
-    Notification.requestPermission().catch(() => {});
-  }
-}
-
-function lockApp(){
-  clearSession();
-  S.user = null;
-  if(S.timer) clearInterval(S.timer);
-  S.timer = null;
-  showGate("login");
 }
 
 /* ============================================================
@@ -2556,6 +2524,13 @@ function renderDrawer(sym){
     '<div class="sec-t">Come si compone il punteggio</div>' +
     '<div class="brk">' + brk + '</div>' +
     '<div class="verdict">' + verdict + '</div>' +
+    '<div class="sec-t">Operare su questo strumento</div>' +
+    (brkTradable(a.sym, a.cls)
+      ? '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">' +
+          '<button class="btn primary" id="dTrade" style="font-size:12px">Compra o vendi su ' + esc(a.sym) + '</button>' +
+          '<span style="font-size:11px;color:var(--dim2)">' + (B.connected ? (B.cfg.mode === "live" ? "conto REALE" : "conto demo") : "broker non collegato") + '</span>' +
+        '</div>'
+      : '<div class="brk-msg on warn" style="margin-top:0">' + esc(brkReason(a.sym, a.cls)) + '</div>') +
     '<div class="sec-t">Avviso di prezzo</div>' +
     '<div class="alert-form">' +
       '<select id="alDir"><option value="above">Sale sopra</option><option value="below">Scende sotto</option></select>' +
@@ -2568,6 +2543,9 @@ function renderDrawer(sym){
     ).join("") : '<div style="font-size:11.5px;color:var(--dim2)">Nessuna soglia impostata per questo strumento.</div>') + '</div>';
 
   drawBig(a);
+
+  const tradeBtn = $("dTrade");
+  if(tradeBtn) tradeBtn.addEventListener("click", () => ordOpen(sym));
 
   $("alAdd").addEventListener("click", () => {
     const dir = $("alDir").value;
@@ -2813,164 +2791,560 @@ $("clock").textContent = timeIt(new Date());
 window.addEventListener("resize", () => { if(S.openSym) drawBig(S.bySym[S.openSym]); drawSimChart(); });
 
 /* ============================================================
-   CONNESSIONE BROKER — configurazione locale + adapter
+   AUTENTICAZIONE — account locale al browser
+   La password non lascia mai il dispositivo: viene salvata solo
+   come SHA-256(sale + password). Nessun server, nessun recupero.
    ============================================================ */
-const BRK_STORE = "mr_broker";
-const BRK_BROKERS = {
-  ig:      { name: "IG Italia",           base: "https://api.ig.com/gateway/deal" },
-  sella:   { name: "Banca Sella",         base: "https://api.sella.it" },
-  directa: { name: "Directa SIM",         base: "https://api.directa.it" },
-  fineco:  { name: "Fineco Bank",         base: "https://api.fineco.it" },
-  ibkr:    { name: "Interactive Brokers", base: "https://localhost:5000/v1/api" },
-  degiro:  { name: "DEGIRO",              base: "https://trader.degiro.nl" },
-  altro:   { name: "Altro intermediario", base: "" }
-};
+const AUTH_ACCOUNTS = "mr_accounts";
+const AUTH_SESSION  = "mr_session";
 
-let brk = { broker:"", env:"demo", key:"", secret:"", account:"", base:"", saved:0 };
-
-/* Adapter: segnaposto espliciti. Nessuna chiamata di rete, nessun ordine. */
-const BrokerAdapter = {
-  configured(){ return !!(brk.broker && brk.key && brk.secret && brk.account); },
-  mode(){ return brk.env === "real" ? "real" : "demo"; },
-  async connect(){
-    throw new Error("BrokerAdapter.connect() non implementato: richiede un backend che firmi le richieste con le tue chiavi.");
-  },
-  async account(){
-    throw new Error("BrokerAdapter.account() non implementato: nessuna chiamata viene effettuata da questa pagina.");
-  },
-  async positions(){
-    throw new Error("BrokerAdapter.positions() non implementato: nessuna chiamata viene effettuata da questa pagina.");
-  },
-  async placeOrder(){
-    throw new Error("BrokerAdapter.placeOrder() non implementato: questa pagina non invia ordini, ne in demo ne in reale.");
-  }
-};
-
-function brkMsg(txt, kind){
-  const el = $("brkMsg");
-  if(!el) return;
-  el.className = "brk-msg on " + (kind || "warn");
-  el.textContent = txt;
-}
-
-function loadBroker(){
+function authRead(){
   try{
-    const raw = localStorage.getItem(BRK_STORE);
-    if(raw) brk = Object.assign(brk, JSON.parse(raw));
+    const raw = localStorage.getItem(AUTH_ACCOUNTS);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  }catch(e){ return []; }
+}
+function authWrite(list){
+  try{ localStorage.setItem(AUTH_ACCOUNTS, JSON.stringify(list)); }catch(e){}
+}
+function authSession(){
+  try{
+    const raw = localStorage.getItem(AUTH_SESSION);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+function authSetSession(s){
+  try{ localStorage.setItem(AUTH_SESSION, JSON.stringify(s)); }catch(e){}
+}
+function authClearSession(){
+  try{ localStorage.removeItem(AUTH_SESSION); }catch(e){}
+}
+function normEmail(v){ return String(v||"").trim().toLowerCase(); }
+function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normEmail(v)); }
+
+function randomSalt(){
+  const b = new Uint8Array(16);
+  if(window.crypto && crypto.getRandomValues) crypto.getRandomValues(b);
+  else for(let i=0;i<b.length;i++) b[i] = Math.floor(Math.random()*256);
+  return Array.from(b).map(x => x.toString(16).padStart(2,"0")).join("");
+}
+
+/* SHA-256 via Web Crypto. Richiede un contesto sicuro: https o localhost.
+   Su GitHub Pages è https, quindi funziona. Su file:// aperto in locale
+   crypto.subtle non esiste: in quel caso si usa un fallback dichiarato. */
+async function sha256Hex(text){
+  if(window.crypto && crypto.subtle && crypto.subtle.digest){
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,"0")).join("");
+  }
+  // fallback non crittografico, solo per file:// — segnalato all'utente
+  let h1 = 0x811c9dc5, h2 = 0x01000193;
+  for(let i=0;i<text.length;i++){
+    h1 ^= text.charCodeAt(i); h1 = Math.imul(h1, 16777619) >>> 0;
+    h2 = (Math.imul(h2 ^ text.charCodeAt(i), 2654435761)) >>> 0;
+  }
+  return ("fb" + h1.toString(16).padStart(8,"0") + h2.toString(16).padStart(8,"0")).padEnd(64,"0");
+}
+
+async function authRegister(name, email, password){
+  const mail = normEmail(email);
+  if(!String(name||"").trim()) throw new Error("Inserisci il tuo nome.");
+  if(!validEmail(mail)) throw new Error("Indirizzo email non valido.");
+  if(String(password||"").length < 6) throw new Error("La password deve avere almeno 6 caratteri.");
+  const list = authRead();
+  if(list.some(a => a.email === mail)) throw new Error("Esiste già un account con questa email su questo browser.");
+  const salt = randomSalt();
+  const hash = await sha256Hex(salt + ":" + password);
+  list.push({ email: mail, name: String(name).trim(), salt, hash, createdAt: Date.now() });
+  authWrite(list);
+  const s = { email: mail, name: String(name).trim(), since: Date.now() };
+  authSetSession(s);
+  return s;
+}
+
+async function authLogin(email, password){
+  const mail = normEmail(email);
+  const acc = authRead().find(a => a.email === mail);
+  if(!acc) throw new Error("Nessun account con questa email su questo browser.");
+  const hash = await sha256Hex(acc.salt + ":" + password);
+  if(hash !== acc.hash) throw new Error("Password errata.");
+  const s = { email: acc.email, name: acc.name, since: Date.now() };
+  authSetSession(s);
+  return s;
+}
+
+let gateMode = "login";
+
+function gateRender(){
+  const has = authRead().length > 0;
+  if(!has) gateMode = "register";
+  const reg = gateMode === "register";
+  $("gateTitle").textContent = reg ? "Crea il tuo account" : "Accedi a Market Radar";
+  $("gateSub").textContent = reg
+    ? "Primo accesso su questo browser: scegli nome, email e password. Restano sul tuo dispositivo."
+    : "Inserisci le credenziali con cui hai già creato l'account su questo browser.";
+  $("gateNameWrap").classList.toggle("gate-hide", !reg);
+  $("gateSubmit").textContent = reg ? "Registrati" : "Accedi";
+  $("gateSwitch").textContent = reg ? "Hai già un account? Accedi" : "Non hai un account? Registrati";
+  $("gPass").setAttribute("autocomplete", reg ? "new-password" : "current-password");
+  $("gateErr").textContent = "";
+}
+
+function gateOpen(){
+  // se esiste già un account su questo browser, si riparte dall'accesso
+  gateMode = authRead().length > 0 ? "login" : "register";
+  $("gate").classList.add("on");
+  gateRender();
+  setTimeout(() => { (gateMode === "register" ? $("gName") : $("gEmail")).focus(); }, 60);
+}
+
+function gateClose(){
+  $("gate").classList.remove("on");
+  $("gPass").value = "";
+}
+
+async function gateSubmit(){
+  const err = $("gateErr");
+  err.textContent = "";
+  const btn = $("gateSubmit");
+  btn.disabled = true;
+  try{
+    const s = gateMode === "register"
+      ? await authRegister($("gName").value, $("gEmail").value, $("gPass").value)
+      : await authLogin($("gEmail").value, $("gPass").value);
+    S.user = s;
+    gateClose();
+    toast("Benvenuto, " + s.name, "Sessione avviata su questo browser", "info");
+    startApp();
+  }catch(e){
+    err.textContent = e.message || String(e);
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+function bindGate(){
+  $("gateSubmit").addEventListener("click", gateSubmit);
+  $("gateSwitch").addEventListener("click", () => {
+    gateMode = gateMode === "register" ? "login" : "register";
+    gateRender();
+  });
+  ["gName","gEmail","gPass"].forEach(id => {
+    $(id).addEventListener("keydown", e => { if(e.key === "Enter") gateSubmit(); });
+  });
+  $("btnUser").addEventListener("click", () => {
+    const s = S.user;
+    if(!s) return;
+    if(confirm("Account: " + s.name + " (" + s.email + ")\n\nVuoi uscire? La sessione verrà chiusa su questo browser.")){
+      authClearSession();
+      S.user = null;
+      appStarted = false;
+      if(S.timer) clearInterval(S.timer);
+      $("userLbl").textContent = "Account";
+      gateOpen();
+    }
+  });
+}
+
+/* ============================================================
+   BROKER — Alpaca, conto demo o reale
+   Due trasporti:
+     proxy  : le chiavi stanno su un tuo server, il browser manda solo il percorso
+     direct : le chiavi sono in questo browser (accettabile solo per il demo)
+   ============================================================ */
+const BRK_KEY = "mr_broker";
+const BRK_PAPER = "https://paper-api.alpaca.markets";
+const BRK_LIVE  = "https://api.alpaca.markets";
+
+const BRK_CRYPTO = new Set(["BTC","ETH","BNB","SOL","XRP","ADA","DOGE","TRX","AVAX","LINK","DOT","LTC",
+  "BCH","XLM","TON","UNI","NEAR","APT","ARB","OP","SHIB","HBAR","ICP","FIL","ATOM","ALGO","VET","POL",
+  "AAVE","MKR","RENDER","INJ","SUI","SEI","PEPE","WIF","BONK","GRT","IMX","LDO"]);
+const BRK_NOT_TRADABLE = new Set(["Indici","Valute","Materie prime"]);
+
+const B = {
+  cfg: { mode:"paper", keyId:"", secret:"", proxyUrl:"", proxyToken:"" },
+  account: null,
+  positions: [],
+  orders: [],
+  connected: false,
+  busy: false
+};
+
+function brkLoad(){
+  try{
+    const raw = localStorage.getItem(BRK_KEY);
+    if(raw){
+      const p = JSON.parse(raw);
+      B.cfg = Object.assign(B.cfg, p || {});
+    }
   }catch(e){}
-  renderBroker();
+}
+function brkSave(){
+  try{ localStorage.setItem(BRK_KEY, JSON.stringify(B.cfg)); }catch(e){}
 }
 
-function saveBroker(){
-  try{ localStorage.setItem(BRK_STORE, JSON.stringify(brk)); }catch(e){}
+function brkSymbol(sym){ return BRK_CRYPTO.has(sym) ? sym + "/USD" : sym; }
+
+function brkTradable(sym, cls){
+  if(BRK_NOT_TRADABLE.has(cls)) return false;
+  if(BRK_CRYPTO.has(sym)) return true;
+  return /^[A-Z]{1,5}$/.test(sym);
 }
 
-function renderBroker(){
-  if(!$("brkBroker")) return;
-  $("brkBroker").value  = brk.broker || "";
-  $("brkKey").value     = brk.key || "";
-  $("brkSecret").value  = brk.secret || "";
-  $("brkAccount").value = brk.account || "";
-  $("brkBase").value    = brk.base || "";
-  const real = brk.env === "real";
-  $("brkEnvTg").classList.toggle("on", real);
-  $("brkEnvTg").setAttribute("aria-pressed", real ? "true" : "false");
-  $("brkPill").className = "brk-pill " + (real ? "real" : "demo");
-  $("brkPillTxt").textContent = real
-    ? "Reale \u00b7 ordini non inviati da questa pagina"
-    : "Demo \u00b7 paper trading";
-  $("brkSavedLbl").textContent = brk.saved
-    ? "Configurazione salvata il " + new Date(brk.saved).toLocaleString("it-IT")
-    : "Nessuna configurazione salvata";
+function brkReason(sym, cls){
+  if(BRK_NOT_TRADABLE.has(cls)) return cls + " non è negoziabile su questo broker: usa un ETF equivalente (GLD per l'oro, SPY per l'S&P 500, UUP per il dollaro).";
+  if(BRK_CRYPTO.has(sym)) return "";
+  if(!/^[A-Z]{1,5}$/.test(sym)) return "Listino estero: il broker collegato negozia solo azioni ed ETF statunitensi.";
+  return "";
 }
 
-function readBrokerForm(){
-  brk.broker  = $("brkBroker").value;
-  brk.key     = $("brkKey").value.trim();
-  brk.secret  = $("brkSecret").value.trim();
-  brk.account = $("brkAccount").value.trim();
-  brk.base    = $("brkBase").value.trim();
+async function brkRequest(path, init){
+  const cfg = B.cfg;
+  const headers = { "Content-Type": "application/json" };
+  let url;
+  if(cfg.proxyUrl){
+    url = cfg.proxyUrl.replace(/\/+$/,"") + path;
+    headers["X-Broker-Mode"] = cfg.mode;
+    if(cfg.proxyToken) headers["Authorization"] = "Bearer " + cfg.proxyToken;
+  }else{
+    if(!cfg.keyId || !cfg.secret) throw new Error("Mancano le credenziali del broker: inseriscile qui sopra.");
+    url = (cfg.mode === "live" ? BRK_LIVE : BRK_PAPER) + path;
+    headers["APCA-API-KEY-ID"] = cfg.keyId;
+    headers["APCA-API-SECRET-KEY"] = cfg.secret;
+  }
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 20000);
+  let res;
+  try{
+    res = await fetch(url, Object.assign({}, init, { headers: Object.assign(headers, (init && init.headers) || {}), signal: ctrl.signal }));
+  }catch(e){
+    clearTimeout(timer);
+    if(e.name === "AbortError") throw new Error("Il broker non ha risposto in tempo.");
+    throw new Error("Chiamata al broker bloccata: " + (e.message || e) + ". Se il browser segnala CORS, usa il server proxy.");
+  }
+  clearTimeout(timer);
+  const text = await res.text();
+  if(!res.ok){
+    let msg = text;
+    try{ const j = JSON.parse(text); msg = j.message || j.error || text; }catch(e){}
+    throw new Error(msg || ("Errore " + res.status));
+  }
+  return text ? JSON.parse(text) : {};
 }
 
-function brkValidate(){
-  readBrokerForm();
-  const miss = [];
-  if(!brk.broker)  miss.push("broker");
-  if(!brk.key)     miss.push("API key");
-  if(!brk.secret)  miss.push("API secret");
-  if(!brk.account) miss.push("ID conto");
-  if(brk.base && !/^https?:\/\//i.test(brk.base)) miss.push("endpoint (deve iniziare con http:// o https://)");
-  return miss;
+const numOr0 = v => (v == null || v === "" ? 0 : Number(v));
+
+async function brkConnect(){
+  const msg = $("brkMsg");
+  msg.className = "brk-msg";
+  B.cfg.keyId = $("brkKey").value.trim();
+  B.cfg.secret = $("brkSecret").value.trim();
+  B.cfg.proxyUrl = $("brkProxy").value.trim().replace(/\/+$/,"");
+  B.cfg.proxyToken = $("brkToken").value.trim();
+  brkSave();
+
+  if(!B.cfg.proxyUrl && (!B.cfg.keyId || !B.cfg.secret)){
+    msg.className = "brk-msg on err";
+    msg.textContent = "Inserisci API Key ID e API Secret, oppure l'indirizzo del tuo server proxy.";
+    return;
+  }
+  if(B.cfg.mode === "live" && !B.cfg.proxyUrl){
+    msg.className = "brk-msg on warn";
+    msg.textContent = "Stai usando le chiavi reali direttamente nel browser. Funziona, ma chiunque usi questo computer può leggerle: per il conto reale conviene il proxy.";
+  }
+
+  B.busy = true;
+  $("brkConnect").disabled = true;
+  $("brkConnect").textContent = "Connessione…";
+  try{
+    const a = await brkRequest("/v2/account");
+    B.account = {
+      id: a.id, status: a.status, currency: a.currency,
+      equity: numOr0(a.equity), cash: numOr0(a.cash),
+      buyingPower: numOr0(a.buying_power), portfolioValue: numOr0(a.portfolio_value),
+      tradingBlocked: !!a.trading_blocked, accountBlocked: !!a.account_blocked
+    };
+    B.connected = true;
+    msg.className = "brk-msg on ok";
+    msg.textContent = "Conto collegato in modalità " + (B.cfg.mode === "live" ? "REALE" : "demo") + " · stato " + a.status + ".";
+    await brkLoadBook();
+    brkRender();
+    toast("Broker collegato", (B.cfg.mode === "live" ? "Conto reale" : "Conto demo") + " · patrimonio " + fmtPrice(B.account.equity), "info");
+  }catch(e){
+    B.connected = false;
+    msg.className = "brk-msg on err";
+    msg.textContent = e.message || String(e);
+    brkRender();
+  }finally{
+    B.busy = false;
+    $("brkConnect").disabled = false;
+    $("brkConnect").textContent = "Collega il conto";
+  }
+}
+
+async function brkLoadBook(){
+  try{
+    const pos = await brkRequest("/v2/positions");
+    B.positions = (Array.isArray(pos) ? pos : []).map(p => ({
+      symbol: p.symbol, qty: numOr0(p.qty), avgEntry: numOr0(p.avg_entry_price),
+      currentPrice: numOr0(p.current_price), marketValue: numOr0(p.market_value),
+      unrealizedPl: numOr0(p.unrealized_pl), unrealizedPlPct: numOr0(p.unrealized_plpc) * 100,
+      side: p.side
+    }));
+  }catch(e){ B.positions = []; }
+  try{
+    const ord = await brkRequest("/v2/orders?status=all&limit=15&direction=desc");
+    B.orders = (Array.isArray(ord) ? ord : []).map(o => ({
+      id: o.id, symbol: o.symbol, side: o.side,
+      qty: o.qty == null ? null : numOr0(o.qty),
+      notional: o.notional == null ? null : numOr0(o.notional),
+      type: o.type, status: o.status, filledQty: numOr0(o.filled_qty),
+      filledAvgPrice: o.filled_avg_price == null ? null : numOr0(o.filled_avg_price),
+      submittedAt: o.submitted_at
+    }));
+  }catch(e){ B.orders = []; }
+}
+
+async function brkRefresh(){
+  if(!B.connected){ toast("Nessun conto", "Collega prima il broker", "risk"); return; }
+  const msg = $("brkMsg");
+  try{
+    const a = await brkRequest("/v2/account");
+    B.account.equity = numOr0(a.equity);
+    B.account.cash = numOr0(a.cash);
+    B.account.buyingPower = numOr0(a.buying_power);
+    B.account.portfolioValue = numOr0(a.portfolio_value);
+    await brkLoadBook();
+    brkRender();
+    msg.className = "brk-msg on ok";
+    msg.textContent = "Saldo aggiornato alle " + timeIt(new Date()) + ".";
+  }catch(e){
+    msg.className = "brk-msg on err";
+    msg.textContent = e.message || String(e);
+  }
+}
+
+function brkDisconnect(){
+  B.connected = false;
+  B.account = null;
+  B.positions = [];
+  B.orders = [];
+  B.cfg.keyId = "";
+  B.cfg.secret = "";
+  B.cfg.proxyToken = "";
+  brkSave();
+  $("brkKey").value = "";
+  $("brkSecret").value = "";
+  $("brkToken").value = "";
+  const msg = $("brkMsg");
+  msg.className = "brk-msg on";
+  msg.textContent = "Conto scollegato. Le chiavi sono state rimosse da questo browser.";
+  brkRender();
+}
+
+function brkRender(){
+  const pill = $("brkPill");
+  const txt = $("brkPillTxt");
+  pill.className = "brk-pill";
+  if(B.connected && B.account){
+    const live = B.cfg.mode === "live";
+    pill.classList.add(live ? "real" : "demo");
+    txt.textContent = (live ? "REALE" : "demo") + " · " + B.account.status;
+  }else{
+    txt.textContent = "non collegato";
+  }
+
+  $("brkAcct").style.display = B.connected ? "grid" : "none";
+  if(B.connected && B.account){
+    $("brkEquity").textContent = fmtPrice(B.account.equity);
+    $("brkCash").textContent = fmtPrice(B.account.cash);
+    $("brkBP").textContent = fmtPrice(B.account.buyingPower);
+  }
+
+  $("brkPosWrap").style.display = B.connected ? "block" : "none";
+  $("brkOrdWrap").style.display = B.connected ? "block" : "none";
+  if(!B.connected) return;
+
+  $("brkPosCount").textContent = B.positions.length;
+  $("brkPos").innerHTML = B.positions.length
+    ? B.positions.map(p => {
+        const cls = p.unrealizedPl >= 0 ? "up" : "down";
+        return '<div class="brk-item">' +
+          '<span class="s">' + esc(p.symbol) + '</span>' +
+          '<span class="q">' + p.qty + ' @ ' + fmtPrice(p.avgEntry) + '</span>' +
+          '<span class="p ' + cls + '">' + fmtPrice(p.marketValue) + ' <span style="font-size:10.5px">(' + fmtPct(p.unrealizedPlPct) + ')</span></span>' +
+          '<button data-closepos="' + esc(p.symbol) + '" title="Chiudi posizione"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>' +
+        '</div>';
+      }).join("")
+    : '<div class="brk-empty">Nessuna posizione aperta sul conto.</div>';
+
+  $("brkOrdCount").textContent = B.orders.length;
+  $("brkOrd").innerHTML = B.orders.length
+    ? B.orders.map(o => {
+        const q = o.qty != null ? o.qty : ("$" + fmtPrice(o.notional));
+        return '<div class="brk-item">' +
+          '<span class="s">' + esc(o.symbol) + ' <span style="font-size:10px;color:var(--dim2);text-transform:uppercase">' + esc(o.side) + '</span></span>' +
+          '<span class="q">' + q + ' · ' + esc(o.status) + '</span>' +
+          '<span class="p">' + (o.filledAvgPrice != null ? fmtPrice(o.filledAvgPrice) : "—") + '</span>' +
+        '</div>';
+      }).join("")
+    : '<div class="brk-empty">Nessun ordine recente.</div>';
+
+  $("brkPos").querySelectorAll("button[data-closepos]").forEach(b => {
+    b.addEventListener("click", () => brkClosePosition(b.dataset.closepos));
+  });
+}
+
+async function brkClosePosition(sym){
+  if(!confirm("Chiudere la posizione su " + sym + " a mercato?")) return;
+  const msg = $("brkMsg");
+  try{
+    await brkRequest("/v2/positions/" + encodeURIComponent(brkSymbol(sym)), { method:"DELETE" });
+    msg.className = "brk-msg on ok";
+    msg.textContent = "Chiusura inviata per " + sym + ".";
+    await brkRefresh();
+  }catch(e){
+    msg.className = "brk-msg on err";
+    msg.textContent = e.message || String(e);
+  }
+}
+
+/* ---------- finestra ordine ---------- */
+let ordSym = null;
+
+function ordOpen(sym){
+  const a = S.bySym[sym];
+  if(!a) return;
+  if(!B.connected){
+    toast("Broker non collegato", "Collega il conto nella scheda Conto broker", "risk");
+    const card = $("brokerCard");
+    if(card && card.scrollIntoView) card.scrollIntoView({ behavior:"smooth", block:"center" });
+    return;
+  }
+  if(!brkTradable(sym, a.cls)){
+    toast("Strumento non negoziabile", brkReason(sym, a.cls), "risk");
+    return;
+  }
+  ordSym = sym;
+  $("ordSide").value = "buy";
+  $("ordType").value = "market";
+  $("ordQty").value = "";
+  $("ordNotional").value = "";
+  $("ordLimit").value = "";
+  $("ordLimitWrap").style.display = "none";
+  $("ordMsg").className = "brk-msg";
+  ordSummary();
+  $("ordModal").classList.add("on");
+}
+
+function ordSummary(){
+  const a = S.bySym[ordSym];
+  if(!a) return;
+  const live = B.cfg.mode === "live";
+  $("ordSummary").innerHTML =
+    '<div style="display:flex;justify-content:space-between;gap:10px"><span style="color:var(--dim)">Strumento</span><b>' + esc(a.sym) + ' · ' + esc(a.longName) + '</b></div>' +
+    '<div style="display:flex;justify-content:space-between;gap:10px"><span style="color:var(--dim)">Prezzo di riferimento</span><b class="num">' + fmtPrice(a.price) + '</b></div>' +
+    '<div style="display:flex;justify-content:space-between;gap:10px"><span style="color:var(--dim)">Simbolo sul broker</span><b class="num">' + esc(brkSymbol(a.sym)) + '</b></div>' +
+    '<div style="display:flex;justify-content:space-between;gap:10px"><span style="color:var(--dim)">Conto</span><b style="color:' + (live ? "var(--down)" : "var(--blue)") + '">' + (live ? "REALE — denaro vero" : "demo — denaro finto") + '</b></div>';
+}
+
+function ordClose(){ $("ordModal").classList.remove("on"); ordSym = null; }
+
+async function ordSend(){
+  const msg = $("ordMsg");
+  msg.className = "brk-msg";
+  const a = S.bySym[ordSym];
+  if(!a) return;
+  const side = $("ordSide").value;
+  const type = $("ordType").value;
+  const qty = parseFloat($("ordQty").value);
+  const notional = parseFloat($("ordNotional").value);
+  const limit = parseFloat($("ordLimit").value);
+
+  const body = {
+    symbol: brkSymbol(a.sym),
+    side: side,
+    type: type,
+    time_in_force: BRK_CRYPTO.has(a.sym) ? "gtc" : "day"
+  };
+  if(type === "limit"){
+    if(!isFinite(limit) || limit <= 0){ msg.className = "brk-msg on err"; msg.textContent = "Indica un prezzo limite maggiore di zero."; return; }
+    body.limit_price = String(limit);
+  }
+  if(isFinite(qty) && qty > 0){
+    body.qty = String(qty);
+  }else if(isFinite(notional) && notional > 0){
+    if(BRK_CRYPTO.has(a.sym)){ msg.className = "brk-msg on err"; msg.textContent = "Per le criptovalute indica la quantità, non l'importo."; return; }
+    body.notional = String(notional);
+  }else{
+    msg.className = "brk-msg on err";
+    msg.textContent = "Indica una quantità o un importo maggiore di zero.";
+    return;
+  }
+
+  const live = B.cfg.mode === "live";
+  const what = (side === "buy" ? "COMPRARE " : "VENDERE ") + (body.qty ? body.qty + " " : "$" + body.notional + " di ") + a.sym;
+  if(!confirm((live ? "⚠️ CONTO REALE\n\n" : "Conto demo\n\n") + "Stai per " + what + " a " + (type === "limit" ? "limite " + limit : "mercato") + ".\n\nConfermi?")) return;
+
+  $("ordSend").disabled = true;
+  $("ordSend").textContent = "Invio…";
+  try{
+    const o = await brkRequest("/v2/orders", { method:"POST", body: JSON.stringify(body) });
+    msg.className = "brk-msg on ok";
+    msg.textContent = "Ordine inviato: " + o.side + " " + (o.qty || ("$" + o.notional)) + " " + o.symbol + " · stato " + o.status + ".";
+    toast("Ordine inviato", o.side + " " + o.symbol + " · " + o.status, "info");
+    await brkRefresh();
+    setTimeout(ordClose, 1400);
+  }catch(e){
+    msg.className = "brk-msg on err";
+    msg.textContent = e.message || String(e);
+  }finally{
+    $("ordSend").disabled = false;
+    $("ordSend").textContent = "Invia ordine";
+  }
 }
 
 function bindBroker(){
-  if(!$("brkSave")) return;
+  brkLoad();
+  $("brkKey").value = B.cfg.keyId || "";
+  $("brkSecret").value = B.cfg.secret || "";
+  $("brkProxy").value = B.cfg.proxyUrl || "";
+  $("brkToken").value = B.cfg.proxyToken || "";
 
-  $("brkEnvTg").addEventListener("click", () => {
-    readBrokerForm();
-    if(brk.env === "real"){
-      brk.env = "demo";
-      saveBroker(); renderBroker();
-      brkMsg("Tornato in demo / paper trading. Nessun ordine viene inviato.", "ok");
-      return;
-    }
-    const miss = brkValidate();
-    if(miss.length){
-      brkMsg("Per attivare l'operativit\u00e0 reale servono: " + miss.join(", ") + ".", "err");
-      return;
-    }
-    brk.env = "real";
-    saveBroker(); renderBroker();
-    brkMsg("Operativit\u00e0 reale selezionata. Attenzione: questa pagina non invia ordini; l'invio richiede il collegamento dell'adapter a un backend.", "warn");
+  $("brkSeg").querySelectorAll("button").forEach(b => {
+    b.classList.toggle("on", b.dataset.mode === B.cfg.mode);
+    b.classList.toggle("live", b.dataset.mode === "live" && b.dataset.mode === B.cfg.mode);
+    b.addEventListener("click", () => {
+      B.cfg.mode = b.dataset.mode;
+      brkSave();
+      $("brkSeg").querySelectorAll("button").forEach(x => {
+        x.classList.toggle("on", x.dataset.mode === B.cfg.mode);
+        x.classList.toggle("live", x.dataset.mode === "live" && x.dataset.mode === B.cfg.mode);
+      });
+      const msg = $("brkMsg");
+      msg.className = "brk-msg on" + (B.cfg.mode === "live" ? " warn" : "");
+      msg.textContent = B.cfg.mode === "live"
+        ? "Modalità REALE selezionata: gli ordini useranno denaro vero. Ricollega il conto per applicarla."
+        : "Modalità demo: gli ordini restano su denaro finto.";
+    });
   });
 
-  $("brkSave").addEventListener("click", () => {
-    const miss = brkValidate();
-    if(miss.length){ brkMsg("Campi mancanti o non validi: " + miss.join(", ") + ".", "err"); return; }
-    brk.saved = Date.now();
-    saveBroker(); renderBroker();
-    brkMsg("Configurazione salvata nel browser. Nessuna verifica \u00e8 stata fatta presso il broker.", "ok");
-  });
+  $("brkConnect").addEventListener("click", brkConnect);
+  $("brkRefresh").addEventListener("click", brkRefresh);
+  $("brkDisconnect").addEventListener("click", brkDisconnect);
 
-  $("brkCheck").addEventListener("click", () => {
-    const miss = brkValidate();
-    if(miss.length){ brkMsg("Formato non valido: " + miss.join(", ") + ".", "err"); return; }
-    const b = BRK_BROKERS[brk.broker] || { name: brk.broker, base: "" };
-    brkMsg("Formato corretto per " + b.name + ". Endpoint previsto: " + (brk.base || b.base || "da definire") + ". Nota: \u00e8 un controllo locale dei campi, non una connessione reale.", "warn");
+  $("ordClose").addEventListener("click", ordClose);
+  $("ordCancel").addEventListener("click", ordClose);
+  $("ordSend").addEventListener("click", ordSend);
+  $("ordType").addEventListener("change", () => {
+    $("ordLimitWrap").style.display = $("ordType").value === "limit" ? "block" : "none";
   });
+  $("ordSide").addEventListener("change", ordSummary);
+  $("ordModal").addEventListener("click", e => { if(e.target === $("ordModal")) ordClose(); });
 
-  $("brkExport").addEventListener("click", () => {
-    readBrokerForm();
-    const b = BRK_BROKERS[brk.broker] || { name: brk.broker, base: "" };
-    const cfg = {
-      broker: brk.broker,
-      brokerName: b.name,
-      environment: brk.env,
-      accountId: brk.account,
-      baseUrl: brk.base || b.base,
-      apiKey: brk.key ? "<inserita, " + brk.key.length + " caratteri>" : "",
-      apiSecret: brk.secret ? "<inserito, " + brk.secret.length + " caratteri>" : "",
-      note: "Le credenziali sono oscurate: reinseriscile nel backend. Nessun ordine viene inviato da questa pagina."
-    };
-    const blob = new Blob([JSON.stringify(cfg, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "market-radar-broker-config.json";
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-    brkMsg("File di configurazione esportato, con le credenziali oscurate.", "ok");
-  });
-
-  $("brkClear").addEventListener("click", () => {
-    brk = { broker:"", env:"demo", key:"", secret:"", account:"", base:"", saved:0 };
-    try{ localStorage.removeItem(BRK_STORE); }catch(e){}
-    renderBroker();
-    brkMsg("Credenziali cancellate da questo browser.", "ok");
-  });
+  brkRender();
 }
-
-loadBroker();
-bindBroker();
 
 /* ============================================================
    AVVIO
@@ -2979,6 +3353,7 @@ let appStarted = false;
 function startApp(){
   if(appStarted) return;
   appStarted = true;
+  if(S.user) $("userLbl").textContent = S.user.name;
   restartTimer();
   render();
   renderSignals();
@@ -2991,22 +3366,21 @@ load();
 loadPortfolio();
 loadSim();
 bindSimButtons();
+bindGate();
+bindBroker();
 
 // la simulazione ha il suo battito: ogni 5 minuti, indipendentemente dalla cadenza del cruscotto
 setInterval(() => { if(S.assets.length) simCycle(false); }, 30 * 1000);
-$("gateForm").addEventListener("submit", submitGate);
-$("btnLock").addEventListener("click", lockApp);
 
+// il cruscotto parte solo dopo il login; la sessione resta valida finché non si esce
 (function boot(){
-  const sess = getSession();
-  const acc = getAccount();
-  if(!acc){
-    showGate("register");
-  } else if(sess && sess.u){
-    S.user = sess.u;
-    enterApp();
-  } else {
-    showGate("login");
+  const s = authSession();
+  if(s){
+    S.user = s;
+    gateClose();
+    startApp();
+  }else{
+    gateOpen();
   }
 })();
 </script>
