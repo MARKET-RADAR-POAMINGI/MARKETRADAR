@@ -330,6 +330,9 @@ footer b{color:var(--dim)}
   padding:11px 13px;font-size:12.5px;line-height:1.6;color:var(--dim);margin-bottom:14px;
 }
 .sim-explain b{color:var(--txt)}
+.sim-srv{display:flex;gap:9px;margin-bottom:12px;flex-wrap:wrap}
+.sim-srv input{flex:1 1 280px;min-width:0;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 11px;color:var(--txt);font-size:12px;font-family:var(--mono)}
+.sim-srv input:focus{outline:none;border-color:var(--gold)}
 .sim-status{font-family:var(--mono);font-size:11.5px;color:var(--dim);background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin-bottom:14px;line-height:1.55}
 .sim-status b{color:var(--txt)} .sim-status.warn{border-color:rgba(242,181,68,.4);color:#e8d9b6} .sim-status.err{border-color:rgba(255,92,108,.4);color:#ffb3bb}
 .sim-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
@@ -636,6 +639,10 @@ footer b{color:var(--dim)}
       <div style="display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap">
         <button class="btn" id="simNow" style="font-size:12px">Esegui un ciclo adesso</button>
         <button class="btn ghost" id="simReset" style="font-size:12px">Azzera simulazione</button>
+      </div>
+      <div class="sim-srv">
+        <input id="simSrv" type="url" placeholder="Server sempre attivo (https://…workers.dev) — opzionale, per far lavorare la simulazione a computer spento" autocomplete="off" spellcheck="false">
+        <button class="btn" id="simSrvBtn" style="font-size:12px">Collega server</button>
       </div>
       <div id="simStatus" class="sim-status">&mdash;</div>
       <div class="sim-kpis">
@@ -2105,6 +2112,30 @@ const SIM_MAX_OPEN= 10;      // posizioni contemporanee massime
 const SIM_EVERY   = 60 * 1000;  // un ciclo ogni minuto
 const SIM_LIVE_MS = 10 * 1000;  // aggiornamento prezzi e grafico ogni 10 secondi
 
+/* ---- modalità server: la simulazione gira su Cloudflare anche a computer spento ---- */
+let SIM_SERVER = "";
+try{ SIM_SERVER = (localStorage.getItem("mr_simserver") || "").replace(/\/+$/, ""); }catch(e){}
+const SRV = { ok: null, updatedAt: null, assets: 0, source: null, error: null, checkedAt: null };
+
+async function simSync(){
+  if(!SIM_SERVER) return;
+  try{
+    const r = await fetch(SIM_SERVER + "/state", { cache: "no-store" });
+    if(!r.ok) throw new Error("server " + r.status);
+    const d = await r.json();
+    if(!d || !d.sim) throw new Error("risposta non valida");
+    S.sim = d.sim;
+    simInit();
+    S.sim.live = [];
+    SRV.ok = true; SRV.updatedAt = d.meta && d.meta.updatedAt; SRV.assets = d.meta ? d.meta.assets : 0;
+    SRV.source = d.meta && d.meta.source; SRV.error = d.meta && d.meta.error;
+  }catch(e){
+    SRV.ok = false; SRV.error = String(e && e.message || e);
+  }
+  SRV.checkedAt = Date.now();
+  renderSim();
+}
+
 function simInit(){
   if(!S.sim){
     S.sim = { cash: SIM_START, positions: {}, closed: [], curve: [], lastCycleT: null, lastOps: [], cycles: 0 };
@@ -2139,6 +2170,7 @@ function simTotals(){
 }
 
 function simCycle(force){
+  if(SIM_SERVER){ if(force) simSync(); return; }   // il ciclo lo fa il server
   simInit();
   if(!S.assets.length) return;
   const now = Date.now();
@@ -2295,6 +2327,23 @@ function updateSimStatus(){
   const el = $("simStatus");
   if(!el) return;
   simInit();
+  if(SIM_SERVER){
+    let c = "sim-status", m;
+    if(SRV.ok === null){ m = "Collegamento al server in corso\u2026"; }
+    else if(!SRV.ok){ c += " err"; m = "<b>Server non raggiungibile.</b> " + esc(SRV.error || "") + " \u2014 controlla l\u2019indirizzo o riprova tra poco."; }
+    else {
+      const age = SRV.updatedAt ? Math.round((Date.now() - SRV.updatedAt) / 1000) : null;
+      const stale = age == null || age > 180;
+      if(stale || SRV.error) c += " warn";
+      m = "<b>Server sempre attivo.</b> " + (SRV.updatedAt ? "Ultimo ciclo " + timeIt(new Date(SRV.updatedAt)) + " (" + age + " s fa)" : "nessun ciclo ancora") +
+          " \u00b7 " + SRV.assets + " crypto" + (SRV.source ? " da " + esc(SRV.source) : "") +
+          " \u00b7 lavora anche a computer spento (solo crypto: i mercati azionari non sono coperti dal server).";
+      if(SRV.error) m += "<br>Ultimo errore del server: " + esc(SRV.error) + " (lo stato resta quello dell\u2019ultimo ciclo riuscito).";
+      else if(stale) m += "<br>Il server non aggiorna da pi\u00f9 di 3 minuti: controlla il trigger ogni minuto su Cloudflare.";
+    }
+    el.className = c; el.innerHTML = m;
+    return;
+  }
   const th = S.settings.threshold;
   const n = S.assets.length;
   let cls = "sim-status", msg;
@@ -2326,6 +2375,7 @@ function updateSimStatus(){
 }
 
 function simLivePoint(){
+  if(SIM_SERVER) return;
   simInit();
   if(!S.assets.length) return;
   S.sim.live.push({ t: Date.now(), equity: simTotals().equity });
@@ -2449,8 +2499,30 @@ function bindSimButtons(){
     simCycle(true);
     toast("Ciclo eseguito", S.sim.lastOps.length ? S.sim.lastOps.length + " operazioni" : "nessuna operazione", "info");
   });
+  const sb = $("simSrvBtn"), si = $("simSrv");
+  if(si) si.value = SIM_SERVER;
+  if(sb) sb.addEventListener("click", () => {
+    let v = (si.value || "").trim().replace(/\/+$/, "");
+    if(v && !/^https:\/\//i.test(v)){ toast("Indirizzo non valido", "Deve iniziare con https://", "info"); return; }
+    SIM_SERVER = v;
+    try{ localStorage.setItem("mr_simserver", v); }catch(e){}
+    SRV.ok = null; SRV.error = null;
+    if(v){ simSync(); toast("Server collegato", "La simulazione ora lavora anche a computer spento", "info"); }
+    else { loadSim(); renderSim(); toast("Server scollegato", "Torna la simulazione locale, attiva solo a pagina aperta", "info"); }
+  });
   const r = $("simReset");
-  if(r) r.addEventListener("click", () => {
+  if(r) r.addEventListener("click", async () => {
+    if(SIM_SERVER){
+      const tok = prompt("Per azzerare la simulazione sul server inserisci la password amministratore (ADMIN_TOKEN):");
+      if(!tok) return;
+      try{
+        const res = await fetch(SIM_SERVER + "/reset?token=" + encodeURIComponent(tok), { method: "POST" });
+        if(!res.ok) throw new Error(res.status === 403 ? "password errata" : "errore " + res.status);
+        await simSync();
+        toast("Simulazione azzerata", "Sul server il capitale è tornato a " + SIM_START.toLocaleString("it-IT") + " unità", "info");
+      }catch(e){ toast("Reset non riuscito", String(e.message || e), "info"); }
+      return;
+    }
     S.sim = { cash: SIM_START, positions: {}, closed: [], curve: [], lastCycleT: null, lastOps: [], cycles: 0 };
     saveSim();
     renderSim();
@@ -3550,6 +3622,8 @@ bindBroker();
 // la simulazione ha il suo battito: cicli ogni minuto, prezzi crypto e grafico ogni 10 secondi
 setInterval(simLiveTick, SIM_LIVE_MS);
 setInterval(updateSimStatus, 5000);
+setInterval(simSync, 10 * 1000);
+simSync();
 
 // il cruscotto parte solo dopo il login; la sessione resta valida finché non si esce
 (function boot(){
